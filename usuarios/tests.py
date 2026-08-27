@@ -115,6 +115,70 @@ class UsuarioTests(TestCase):
         })
         self.assertEqual(response.status_code, 200)
 
+    def test_limite_3_intentos_fallidos_y_bloqueo(self):
+        User.objects.create_user(
+            email='limite@ejemplo.com',
+            password='password123',
+            nombre='Usuario Limite',
+            telefono='1234567890',
+            is_active=True
+        )
+
+        # Intento 1 fallido: quedan 2 intentos
+        res1 = self.client.post(reverse('usuarios:login'), {
+            'username': 'limite@ejemplo.com',
+            'password': 'badpassword1'
+        })
+        self.assertEqual(res1.status_code, 200)
+        self.assertContains(res1, 'Te quedan 2 intentos')
+
+        # Intento 2 fallido: queda 1 intento
+        res2 = self.client.post(reverse('usuarios:login'), {
+            'username': 'limite@ejemplo.com',
+            'password': 'badpassword2'
+        })
+        self.assertEqual(res2.status_code, 200)
+        self.assertContains(res2, 'Te queda 1 intento')
+
+        # Intento 3 fallido: se activa el bloqueo
+        res3 = self.client.post(reverse('usuarios:login'), {
+            'username': 'limite@ejemplo.com',
+            'password': 'badpassword3'
+        })
+        self.assertEqual(res3.status_code, 200)
+        self.assertContains(res3, 'Has superado el límite de 3 intentos fallidos')
+
+        # Intento 4 (incluso con contraseña correcta): permanece bloqueado
+        res4 = self.client.post(reverse('usuarios:login'), {
+            'username': 'limite@ejemplo.com',
+            'password': 'password123'
+        })
+        self.assertEqual(res4.status_code, 200)
+        self.assertContains(res4, 'bloqueado temporalmente')
+
+    def test_login_exitoso_reinicia_contador_intentos(self):
+        User.objects.create_user(
+            email='reset@ejemplo.com',
+            password='password123',
+            nombre='Usuario Reset',
+            telefono='1234567890',
+            is_active=True
+        )
+
+        # 2 intentos fallidos
+        self.client.post(reverse('usuarios:login'), {'username': 'reset@ejemplo.com', 'password': 'bad'})
+        self.client.post(reverse('usuarios:login'), {'username': 'reset@ejemplo.com', 'password': 'bad'})
+
+        # 3er intento exitoso -> debe iniciar sesión y limpiar el contador
+        res_ok = self.client.post(reverse('usuarios:login'), {'username': 'reset@ejemplo.com', 'password': 'password123'})
+        self.assertEqual(res_ok.status_code, 302)
+
+        # Cierra sesión y luego falla 1 vez -> debe tener de nuevo 2 intentos restantes
+        self.client.logout()
+        res_after = self.client.post(reverse('usuarios:login'), {'username': 'reset@ejemplo.com', 'password': 'bad'})
+        self.assertEqual(res_after.status_code, 200)
+        self.assertContains(res_after, 'Te quedan 2 intentos')
+
     def test_logout_requiere_post(self):
         user = User.objects.create_user(
             email='user@ejemplo.com',
