@@ -10,7 +10,7 @@ from django.conf import settings
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.template.loader import render_to_string
-from .forms import RegistroForm, LoginForm
+from .forms import RegistroForm, LoginForm, clear_login_attempts
 from .models import User
 from .tokens import email_verification_token
 
@@ -68,6 +68,7 @@ def confirmar_email(request, uidb64, token):
     if user is not None and email_verification_token.check_token(user, token):
         user.is_active = True
         user.save()
+        clear_login_attempts(user.email)
         messages.success(request, '¡Correo confirmado! Ya puedes iniciar sesión.')
         return redirect('usuarios:login')
     else:
@@ -106,3 +107,9 @@ class CustomPasswordResetView(PasswordResetView):
 class CustomPasswordResetConfirmView(PasswordResetConfirmView):
     template_name = 'usuarios/restablecer_password.html'
     success_url = reverse_lazy('usuarios:login')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        if self.user:
+            clear_login_attempts(self.user.email)
+        return response
