@@ -1,0 +1,534 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Contacto & Ubicación — Dental Clinic{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* =========================================================
+       CONTACT VIEW — MINIMALIST & HIGH-END VISUAL DESIGN
+       ========================================================= */
+
+    .contact-section {
+        min-height: calc(100vh - 200px);
+        padding: 3.5rem 0 5rem;
+        position: relative;
+    }
+
+    .contact-hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.4rem 1rem;
+        border-radius: var(--radius-full);
+        background: var(--accent-teal-light);
+        border: 1px solid var(--accent-teal-border);
+        color: var(--accent-teal-dark);
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .contact-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--text-main);
+        margin-bottom: 0.75rem;
+    }
+
+    .contact-subtitle {
+        font-size: 1.05rem;
+        color: var(--text-muted);
+        max-width: 620px;
+        margin: 0 auto 3rem;
+        line-height: 1.6;
+    }
+
+    /* Auth-like Floating Shells */
+    .contact-shell {
+        background: rgba(255, 255, 255, 0.75);
+        border: 1px solid var(--border-hairline);
+        border-radius: var(--radius-xl);
+        padding: 0.6rem;
+        box-shadow: var(--shadow-float);
+        transition: all 0.4s var(--ease-spring);
+        height: 100%;
+    }
+
+    .contact-core {
+        background: #FFFFFF;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        border-radius: calc(var(--radius-xl) - 0.4rem);
+        padding: 2.75rem 2.25rem;
+        position: relative;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-header-custom {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .card-brand-badge {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+        color: #FFFFFF;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18);
+        flex-shrink: 0;
+    }
+
+    .card-brand-badge-teal {
+        background: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-teal-dark) 100%);
+        box-shadow: 0 8px 20px rgba(13, 148, 136, 0.25);
+    }
+
+    .card-title-custom {
+        font-size: 1.35rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: var(--text-main);
+        margin: 0;
+    }
+
+    .card-subtitle-custom {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin: 0;
+    }
+
+    /* Contact Info Items */
+    .info-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 0.9rem 1rem;
+        border-radius: var(--radius-md);
+        background: #F8FAFC;
+        border: 1px solid var(--border-hairline);
+        margin-bottom: 0.85rem;
+        transition: all 0.25s var(--ease-spring);
+    }
+
+    .info-item:hover {
+        background: #FFFFFF;
+        border-color: var(--accent-teal-border);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .info-icon-box {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: #FFFFFF;
+        border: 1px solid var(--border-subtle);
+        color: var(--accent-teal-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.95rem;
+        flex-shrink: 0;
+    }
+
+    .info-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 700;
+        color: var(--text-subtle);
+        margin-bottom: 0.15rem;
+    }
+
+    .info-val {
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: var(--text-main);
+        word-break: break-word;
+    }
+
+    /* Schedule List */
+    .schedule-box {
+        margin-top: 1.5rem;
+        padding-top: 1.25rem;
+        border-top: 1px solid var(--border-hairline);
+    }
+
+    .schedule-title {
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-main);
+        margin-bottom: 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .schedule-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.4rem 0;
+        font-size: 0.85rem;
+        border-bottom: 1px dashed #F1F5F9;
+    }
+
+    .schedule-row:last-child {
+        border-bottom: none;
+    }
+
+    .badge-open {
+        background: #F0FDF4;
+        color: #166534;
+        border: 1px solid #BBF7D0;
+        padding: 0.2rem 0.55rem;
+        border-radius: var(--radius-full);
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .badge-closed {
+        background: #FEF2F2;
+        color: #991B1B;
+        border: 1px solid #FECACA;
+        padding: 0.2rem 0.55rem;
+        border-radius: var(--radius-full);
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    /* Form Inputs */
+    .form-group-custom {
+        margin-bottom: 1.25rem;
+    }
+
+    .form-label-custom {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 0.45rem;
+        display: block;
+    }
+
+    .form-control-custom {
+        width: 100%;
+        background-color: #F8FAFC;
+        border: 1px solid var(--border-hairline);
+        border-radius: var(--radius-md);
+        padding: 0.85rem 1.1rem;
+        font-size: 0.95rem;
+        font-family: var(--font-sans);
+        color: var(--text-main);
+        transition: all 0.25s var(--ease-spring);
+        outline: none;
+    }
+
+    .form-control-custom:focus {
+        background-color: #FFFFFF;
+        border-color: var(--accent-teal);
+        box-shadow: 0 0 0 4px var(--accent-teal-light);
+    }
+
+    .form-control-custom::placeholder {
+        color: #94A3B8;
+        font-size: 0.9rem;
+    }
+
+    /* Button-in-Button CTA */
+    .btn-island-primary {
+        background: var(--text-main);
+        color: #FFFFFF !important;
+        font-weight: 700;
+        font-size: 0.98rem;
+        padding: 0.5rem 0.6rem 0.5rem 1.6rem;
+        border-radius: var(--radius-full);
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25);
+        transition: all 0.35s var(--ease-spring);
+        text-decoration: none;
+        cursor: pointer;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-island-primary:hover {
+        background: #1E293B;
+        transform: translateY(-2px);
+        box-shadow: 0 16px 32px -6px rgba(15, 23, 42, 0.32);
+        color: #FFFFFF !important;
+    }
+
+    .btn-island-primary:active {
+        transform: scale(0.98);
+    }
+
+    .btn-island-primary .btn-icon-core {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        transition: transform 0.3s var(--ease-spring), background 0.3s ease;
+    }
+
+    .btn-island-primary:hover .btn-icon-core {
+        transform: translate(2px, -2px) scale(1.05);
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    .security-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        font-size: 0.78rem;
+        color: var(--text-subtle);
+        margin-top: 1.25rem;
+    }
+
+    .book-banner {
+        background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+        border-radius: var(--radius-md);
+        padding: 1.25rem 1.5rem;
+        color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: auto;
+    }
+
+    .book-banner-btn {
+        background: var(--accent-teal);
+        color: #FFFFFF !important;
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 0.45rem 1.1rem;
+        border-radius: var(--radius-full);
+        text-decoration: none;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .book-banner-btn:hover {
+        background: var(--accent-teal-dark);
+        transform: translateY(-1px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="contact-section">
+    <div class="container">
+        <!-- Header / Hero -->
+        <div class="text-center mb-5">
+            <div class="contact-hero-badge">
+                <i class="fas fa-headset"></i> Atención Personalizada & Citas
+            </div>
+            <h1 class="contact-title">Contacto & Ubicación</h1>
+            <p class="contact-subtitle">
+                Estamos a tu disposición para resolver dudas sobre tratamientos, presupuestos o emergencias odontológicas.
+            </p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            <!-- Left Column: Clinic Information & Hours -->
+            <div class="col-lg-5">
+                <div class="contact-shell">
+                    <div class="contact-core">
+                        <div class="card-header-custom">
+                            <div class="card-brand-badge">
+                                <i class="fas fa-clinic-medical"></i>
+                            </div>
+                            <div>
+                                <h3 class="card-title-custom">{% if config %}{{ config.nombre_consultorio }}{% else %}Dental Clinic{% endif %}</h3>
+                                <p class="card-subtitle-custom">{% if config %}{{ config.nombre_dentista }}{% else %}Atención Odontológica Integral{% endif %}</p>
+                            </div>
+                        </div>
+
+                        <!-- Info items -->
+                        <div class="info-item">
+                            <div class="info-icon-box">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <div class="info-label">Ubicación del Consultorio</div>
+                                <div class="info-val">{% if config %}{{ config.direccion }}{% else %}Av. Principal #123, Colonia Centro, CDMX{% endif %}</div>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon-box">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div>
+                                <div class="info-label">Teléfono Directo</div>
+                                <div class="info-val">{% if config %}{{ config.telefono }}{% else %}+52 55 1234 5678{% endif %}</div>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon-box">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <div class="info-label">Correo Electrónico</div>
+                                <div class="info-val">contacto@dentalclinic.com</div>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon-box" style="color: #16A34A;">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <div>
+                                <div class="info-label">WhatsApp de Asistencia</div>
+                                <div class="info-val">{% if config %}{{ config.telefono }}{% else %}+52 55 9876 5432{% endif %}</div>
+                            </div>
+                        </div>
+
+                        <!-- Schedule -->
+                        <div class="schedule-box">
+                            <div class="schedule-title">
+                                <span><i class="far fa-clock me-2 text-teal" style="color: var(--accent-teal);"></i>Horario Semanal</span>
+                                <span class="text-muted" style="font-size: 0.75rem; text-transform: none; font-weight: 500;">
+                                    <i class="fas fa-globe-americas me-1"></i>{% if config %}{{ config.get_zona_horaria_display|slice:":17" }}{% else %}UTC-6{% endif %}
+                                </span>
+                            </div>
+                            
+                            {% if horarios %}
+                                {% for h in horarios %}
+                                <div class="schedule-row">
+                                    <span class="fw-medium text-secondary">{{ h.get_dia_display }}</span>
+                                    {% if h.activo %}
+                                    <div>
+                                        <span class="text-dark fw-semibold me-2">{{ h.hora_apertura|time:"H:i" }} – {{ h.hora_cierre|time:"H:i" }}</span>
+                                        <span class="badge-open">Abierto</span>
+                                    </div>
+                                    {% else %}
+                                    <span class="badge-closed">Cerrado</span>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="schedule-row">
+                                    <span class="fw-medium text-secondary">Lunes a Jueves</span>
+                                    <span class="text-dark fw-semibold">09:00 – 18:00</span>
+                                </div>
+                                <div class="schedule-row">
+                                    <span class="fw-medium text-secondary">Viernes</span>
+                                    <span class="text-dark fw-semibold">09:00 – 15:00</span>
+                                </div>
+                                <div class="schedule-row">
+                                    <span class="fw-medium text-secondary">Sábados y Domingos</span>
+                                    <span class="badge-closed">Cerrado</span>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Quick Appointment CTA Banner -->
+                        <div class="book-banner mt-4">
+                            <div>
+                                <div class="fw-bold small">¿Listo para tu revisión?</div>
+                                <div class="text-muted" style="font-size: 0.78rem;">Agenda tu cita online en 1 minuto</div>
+                            </div>
+                            <a href="{% url 'citas:agendar' %}" class="book-banner-btn">
+                                <span>Reservar</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Message Form -->
+            <div class="col-lg-6">
+                <div class="contact-shell">
+                    <div class="contact-core">
+                        <div class="card-header-custom">
+                            <div class="card-brand-badge card-brand-badge-teal">
+                                <i class="fas fa-paper-plane"></i>
+                            </div>
+                            <div>
+                                <h3 class="card-title-custom">Envíanos un Mensaje</h3>
+                                <p class="card-subtitle-custom">Te responderemos a la brevedad por correo o teléfono</p>
+                            </div>
+                        </div>
+
+                        <form onsubmit="alert('¡Gracias por escribirnos! Hemos recibido tu mensaje y nuestro personal se comunicará contigo a la brevedad.'); this.reset(); return false;">
+                            
+                            <div class="form-group-custom">
+                                <label class="form-label-custom">Nombre completo</label>
+                                <input type="text"
+                                       class="form-control-custom"
+                                       placeholder="Tu nombre y apellidos"
+                                       required>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6 form-group-custom">
+                                    <label class="form-label-custom">Correo electrónico</label>
+                                    <input type="email"
+                                           class="form-control-custom"
+                                           placeholder="tu-correo@ejemplo.com"
+                                           required>
+                                </div>
+                                <div class="col-md-6 form-group-custom">
+                                    <label class="form-label-custom">Teléfono (opcional)</label>
+                                    <input type="tel"
+                                           class="form-control-custom"
+                                           placeholder="10 dígitos">
+                                </div>
+                            </div>
+
+                            <div class="form-group-custom">
+                                <label class="form-label-custom">Motivo o Consulta</label>
+                                <textarea class="form-control-custom"
+                                          rows="5"
+                                          placeholder="Escribe aquí tu consulta, duda sobre algún tratamiento o solicitud de información..."
+                                          style="resize: vertical; min-height: 120px;"
+                                          required></textarea>
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="submit" class="btn-island-primary">
+                                    <span>Enviar Mensaje Directo</span>
+                                    <span class="btn-icon-core">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </span>
+                                </button>
+                            </div>
+
+                            <!-- Privacy / Security Note -->
+                            <div class="security-badge">
+                                <i class="fas fa-user-shield"></i>
+                                <span>Información protegida bajo confidencialidad médica y <a href="{% url 'core:privacidad' %}" class="text-decoration-underline ms-1" style="color: var(--text-muted);">privacidad</a></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

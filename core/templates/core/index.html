@@ -1,0 +1,1357 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{% if config %}{{ config.nombre_consultorio }}{% else %}Dental Clinic{% endif %} — Odontología de Vanguardia & Precisión Médica{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* =========================================================
+       HIGH-END VISUAL DESIGN SYSTEM — DENTAL CLINIC
+       ========================================================= */
+
+    /* Typography Utilities */
+    .font-serif {
+        font-family: var(--font-serif);
+        font-style: italic;
+        font-weight: 400;
+    }
+
+    .tracking-tight-titles {
+        letter-spacing: -0.035em;
+    }
+
+    /* Ambient Background Layer */
+    .bg-mesh-glow {
+        position: absolute;
+        width: 650px;
+        height: 650px;
+        border-radius: 50%;
+        filter: blur(90px);
+        pointer-events: none;
+        opacity: 0.35;
+        z-index: 0;
+    }
+
+    .glow-teal {
+        top: -100px;
+        right: -100px;
+        background: radial-gradient(circle, rgba(13, 148, 136, 0.15) 0%, rgba(13, 148, 136, 0) 70%);
+    }
+
+    .glow-blue {
+        bottom: 5%;
+        left: -150px;
+        background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, rgba(56, 189, 248, 0) 70%);
+    }
+
+    /* Hero Section with Image 40 as Cinematic Canvas */
+    .hero-wrapper-section {
+        padding: 2rem 0 3rem 0;
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-canvas {
+        position: relative;
+        background: linear-gradient(110deg, rgba(15, 23, 42, 0.94) 0%, rgba(15, 23, 42, 0.86) 45%, rgba(15, 23, 42, 0.62) 100%),
+                    url('/media/images/40.jpg') center center / cover no-repeat;
+        border-radius: var(--radius-xl);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: #FFFFFF;
+        padding: 5rem 4rem;
+        overflow: hidden;
+        box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.25);
+    }
+
+    .hero-canvas::before {
+        content: '';
+        position: absolute;
+        top: -30%;
+        right: -15%;
+        width: 550px;
+        height: 550px;
+        background: radial-gradient(circle, rgba(13, 148, 136, 0.3) 0%, rgba(13, 148, 136, 0) 70%);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .eyebrow-pill-glass {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: var(--radius-full);
+        padding: 0.4rem 1rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #E0F2FE;
+        margin-bottom: 1.5rem;
+    }
+
+    .pulse-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background-color: #2DD4BF;
+        box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.25);
+        display: inline-block;
+        animation: pulseAnimation 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseAnimation {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.5); }
+        70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(45, 212, 191, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(45, 212, 191, 0); }
+    }
+
+    .hero-h1 {
+        font-size: clamp(2.4rem, 5vw, 4rem);
+        font-weight: 800;
+        line-height: 1.1;
+        color: #FFFFFF;
+        margin-bottom: 1.4rem;
+    }
+
+    .hero-lead {
+        font-size: 1.12rem;
+        line-height: 1.65;
+        color: #CBD5E1;
+        max-width: 540px;
+        margin-bottom: 2.25rem;
+    }
+
+    /* Nested Button-in-Button CTA (Light on Dark Canvas) */
+    .btn-island-primary-light {
+        background: #FFFFFF;
+        color: var(--text-main) !important;
+        font-weight: 700;
+        font-size: 0.98rem;
+        padding: 0.5rem 0.6rem 0.5rem 1.6rem;
+        border-radius: var(--radius-full);
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        transition: all 0.35s var(--ease-spring);
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn-island-primary-light:hover {
+        background: #F8FAFC;
+        transform: translateY(-2px);
+        box-shadow: 0 16px 32px -6px rgba(0, 0, 0, 0.4);
+        color: var(--text-main) !important;
+    }
+
+    .btn-island-primary-light:active {
+        transform: scale(0.97);
+    }
+
+    .btn-island-primary-light .btn-icon-core {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(15, 23, 42, 0.08);
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.95rem;
+        transition: transform 0.3s var(--ease-spring), background 0.3s ease;
+    }
+
+    .btn-island-primary-light:hover .btn-icon-core {
+        transform: translate(2px, -2px) scale(1.05);
+        background: rgba(15, 23, 42, 0.15);
+    }
+
+    .btn-island-ghost-light {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: #FFFFFF !important;
+        font-weight: 600;
+        font-size: 0.95rem;
+        padding: 0.85rem 1.5rem;
+        border-radius: var(--radius-full);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.25s var(--ease-spring);
+        text-decoration: none;
+    }
+
+    .btn-island-ghost-light:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: translateY(-2px);
+        color: #FFFFFF !important;
+    }
+
+    /* Double-Bezel Hero Right Card */
+    .hero-card-glass {
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: var(--radius-xl);
+        padding: 2.25rem;
+        color: var(--text-main);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Standard Double-Bezel for Content */
+    .double-bezel-shell {
+        background: rgba(255, 255, 255, 0.75);
+        border: 1px solid var(--border-hairline);
+        border-radius: var(--radius-xl);
+        padding: 0.55rem;
+        box-shadow: var(--shadow-ambient);
+        transition: all 0.4s var(--ease-spring);
+    }
+
+    .double-bezel-shell:hover {
+        border-color: rgba(0, 0, 0, 0.12);
+        box-shadow: var(--shadow-hover);
+        transform: translateY(-3px);
+    }
+
+    .double-bezel-core {
+        background: #FFFFFF;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        border-radius: calc(var(--radius-xl) - 0.4rem);
+        padding: 2.25rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Nested Button-in-Button CTA (Dark on Light) */
+    .btn-island-primary {
+        background: var(--text-main);
+        color: #FFFFFF !important;
+        font-weight: 700;
+        font-size: 0.98rem;
+        padding: 0.5rem 0.6rem 0.5rem 1.6rem;
+        border-radius: var(--radius-full);
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25);
+        transition: all 0.35s var(--ease-spring);
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn-island-primary:hover {
+        background: #1E293B;
+        transform: translateY(-2px);
+        box-shadow: 0 16px 32px -6px rgba(15, 23, 42, 0.32);
+        color: #FFFFFF !important;
+    }
+
+    .btn-island-primary .btn-icon-core {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.95rem;
+        transition: transform 0.3s var(--ease-spring), background 0.3s ease;
+    }
+
+    .btn-island-primary:hover .btn-icon-core {
+        transform: translate(2px, -2px) scale(1.05);
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-island-ghost {
+        background: #FFFFFF;
+        color: var(--text-main) !important;
+        font-weight: 600;
+        font-size: 0.95rem;
+        padding: 0.85rem 1.5rem;
+        border-radius: var(--radius-full);
+        border: 1px solid var(--border-hairline);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.25s var(--ease-spring);
+        text-decoration: none;
+    }
+
+    .btn-island-ghost:hover {
+        background: #F8FAFC;
+        border-color: #CBD5E1;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-ambient);
+        color: var(--text-main) !important;
+    }
+
+    /* Trust Metrics Grid */
+    .metric-card {
+        background: #FFFFFF;
+        border: 1px solid var(--border-hairline);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-ambient);
+        transition: all 0.3s var(--ease-spring);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .metric-card:hover {
+        border-color: rgba(0, 0, 0, 0.12);
+        box-shadow: var(--shadow-hover);
+        transform: translateY(-3px);
+    }
+
+    .metric-icon-badge {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.15rem;
+        margin-bottom: 1.1rem;
+    }
+
+    .badge-teal-tint { background: #F0FDFA; color: #0D9488; border: 1px solid #CCFBF1; }
+    .badge-emerald-tint { background: #ECFDF5; color: #059669; border: 1px solid #A7F3D0; }
+    .badge-blue-tint { background: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE; }
+    .badge-amber-tint { background: #FFFBEB; color: #D97706; border: 1px solid #FDE68A; }
+
+    /* Bento Box Grid */
+    .bento-section {
+        padding: 6rem 0;
+    }
+
+    .section-eyebrow {
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent-teal);
+        background: var(--accent-teal-light);
+        border: 1px solid var(--accent-teal-border);
+        padding: 0.3rem 0.85rem;
+        border-radius: var(--radius-full);
+        display: inline-block;
+        margin-bottom: 0.9rem;
+    }
+
+    .section-headline {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--text-main);
+        line-height: 1.15;
+        margin-bottom: 1rem;
+    }
+
+    .section-subtext {
+        font-size: 1.05rem;
+        color: var(--text-muted);
+        max-width: 600px;
+        margin: 0 auto 3.5rem auto;
+        line-height: 1.6;
+    }
+
+    .bento-card {
+        background: #FFFFFF;
+        border: 1px solid var(--border-hairline);
+        border-radius: var(--radius-xl);
+        padding: 2.25rem 2rem;
+        box-shadow: var(--shadow-ambient);
+        transition: all 0.35s var(--ease-spring);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .bento-card:hover {
+        border-color: rgba(0, 0, 0, 0.12);
+        box-shadow: var(--shadow-hover);
+        transform: translateY(-4px);
+    }
+
+    .bento-card-featured {
+        background: linear-gradient(145deg, #0F172A 0%, #1E293B 100%);
+        color: #FFFFFF;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .bento-card-featured:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .bento-card-featured .bento-title {
+        color: #FFFFFF;
+    }
+
+    .bento-card-featured .bento-desc {
+        color: #94A3B8;
+    }
+
+    .bento-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: #F8FAFC;
+        border: 1px solid var(--border-hairline);
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s var(--ease-spring);
+    }
+
+    .bento-card:hover .bento-icon {
+        background: var(--text-main);
+        color: #FFFFFF;
+        transform: scale(1.05);
+    }
+
+    .bento-card-featured .bento-icon {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.15);
+        color: #FFFFFF;
+    }
+
+    .bento-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--text-main);
+        margin-bottom: 0.65rem;
+    }
+
+    .bento-desc {
+        font-size: 0.94rem;
+        line-height: 1.6;
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+        flex-grow: 1;
+    }
+
+    .bento-action {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: var(--accent-teal);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        transition: gap 0.2s ease;
+    }
+
+    .bento-action:hover {
+        gap: 0.7rem;
+        color: var(--accent-teal-dark);
+    }
+
+    .bento-card-featured .bento-action {
+        color: #2DD4BF;
+    }
+
+    /* Stepper Workflow */
+    .steps-section {
+        background: #FFFFFF;
+        border-top: 1px solid var(--border-hairline);
+        border-bottom: 1px solid var(--border-hairline);
+        padding: 6.5rem 0;
+    }
+
+    .step-pill {
+        width: 42px;
+        height: 42px;
+        border-radius: var(--radius-full);
+        background: var(--bg-canvas);
+        border: 1px solid var(--border-hairline);
+        color: var(--text-main);
+        font-family: var(--font-mono);
+        font-size: 0.95rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.25rem;
+    }
+
+    /* Editorial About Split */
+    .about-media-container {
+        position: relative;
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        border: 1px solid var(--border-hairline);
+        box-shadow: var(--shadow-float);
+        background: #000;
+    }
+
+    .about-media-container img {
+        width: 100%;
+        height: 480px;
+        object-fit: cover;
+        opacity: 0.92;
+        transition: transform 0.8s var(--ease-spring);
+    }
+
+    .about-media-container:hover img {
+        transform: scale(1.03);
+    }
+
+    .floating-media-badge {
+        position: absolute;
+        bottom: 1.5rem;
+        left: 1.5rem;
+        right: 1.5rem;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        border-radius: var(--radius-lg);
+        padding: 1rem 1.25rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Minimalist Schedule Widget */
+    .schedule-widget {
+        background: #FFFFFF;
+        border: 1px solid var(--border-hairline);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-ambient);
+    }
+
+    .schedule-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.65rem 0;
+        font-size: 0.92rem;
+        border-bottom: 1px dashed var(--border-hairline);
+    }
+
+    .schedule-row:last-child {
+        border-bottom: none;
+    }
+
+    /* Testimonials */
+    .testimonial-card {
+        background: #FFFFFF;
+        border: 1px solid var(--border-hairline);
+        border-radius: var(--radius-xl);
+        padding: 2.25rem 2rem;
+        box-shadow: var(--shadow-ambient);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .rating-stars {
+        color: #F59E0B;
+        font-size: 0.85rem;
+        display: flex;
+        gap: 0.25rem;
+        margin-bottom: 1.1rem;
+    }
+
+    .quote-text {
+        font-size: 0.98rem;
+        line-height: 1.65;
+        color: var(--text-body);
+        margin-bottom: 1.5rem;
+    }
+
+    .avatar-initials {
+        width: 38px;
+        height: 38px;
+        border-radius: var(--radius-full);
+        background: #F1F5F9;
+        border: 1px solid var(--border-hairline);
+        color: var(--text-main);
+        font-weight: 700;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Minimalist Accordion (FAQ) */
+    .faq-item {
+        border-bottom: 1px solid var(--border-hairline);
+        padding: 1.5rem 0;
+    }
+
+    .faq-trigger {
+        background: none;
+        border: none;
+        width: 100%;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-main);
+        cursor: pointer;
+        padding: 0;
+        transition: color 0.2s ease;
+    }
+
+    .faq-trigger:hover {
+        color: var(--accent-teal);
+    }
+
+    .faq-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #F8FAFC;
+        border: 1px solid var(--border-hairline);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        transition: transform 0.3s var(--ease-spring);
+        flex-shrink: 0;
+    }
+
+    .faq-trigger[aria-expanded="true"] .faq-icon {
+        transform: rotate(45deg);
+        background: var(--text-main);
+        color: #FFFFFF;
+    }
+
+    .faq-content {
+        padding-top: 1rem;
+        font-size: 0.96rem;
+        line-height: 1.65;
+        color: var(--text-muted);
+    }
+
+    /* Final Double-Bezel CTA */
+    .cta-outer-shell {
+        background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+        border-radius: var(--radius-xl);
+        padding: 0.75rem;
+        box-shadow: var(--shadow-float);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-inner-core {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: calc(var(--radius-xl) - 0.5rem);
+        padding: 4.5rem 3rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Scroll Reveal Initial States */
+    .reveal-on-scroll {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.7s var(--ease-spring), transform 0.7s var(--ease-spring);
+        will-change: transform, opacity;
+    }
+
+    .reveal-on-scroll.is-revealed {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @media (max-width: 991px) {
+        .hero-canvas {
+            padding: 3.5rem 1.75rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Ambient Mesh Gradient Spots -->
+<div class="position-relative">
+    <div class="bg-mesh-glow glow-teal"></div>
+    <div class="bg-mesh-glow glow-blue"></div>
+</div>
+
+<!-- =========================================================
+     1. HERO HEADER WITH IMAGE 40 (CINEMATIC LUXURY CANVAS)
+     ========================================================= -->
+<section class="hero-wrapper-section">
+    <div class="container">
+        <div class="hero-canvas">
+            <div class="row align-items-center g-5 position-relative" style="z-index: 2;">
+                <!-- Left Hero Column -->
+                <div class="col-lg-7">
+                    <div class="reveal-on-scroll">
+                        <div class="eyebrow-pill-glass">
+                            <span class="pulse-dot"></span>
+                            <span>Odontología de Precisión & Cuidado Humano</span>
+                        </div>
+
+                        <h1 class="hero-h1 tracking-tight-titles">
+                            Tu sonrisa en las mejores manos, <span class="font-serif text-info" style="color: #5EEAD4 !important;">redefinida con calidez.</span>
+                        </h1>
+
+                        <p class="hero-lead">
+                            Reserva tu consulta en línea en tiempo real con disponibilidad 24/7. Tratamientos de mínima invasión, confort absoluto y protección de datos médicos con cifrado de grado clínico.
+                        </p>
+
+                        <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
+                            <a href="{% url 'citas:agendar' %}" class="btn-island-primary-light">
+                                <span>Reservar Cita en Línea</span>
+                                <span class="btn-icon-core">
+                                    <i class="fas fa-arrow-right"></i>
+                                </span>
+                            </a>
+                            <a href="#tratamientos" class="btn-island-ghost-light">
+                                <i class="fas fa-tooth"></i>
+                                <span>Ver Tratamientos</span>
+                            </a>
+                        </div>
+
+                        <!-- Micro-Trust Strip on Dark Canvas -->
+                        <div class="d-flex flex-wrap align-items-center gap-4 pt-2 text-white-50 small">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-check-circle" style="color: #2DD4BF;"></i>
+                                <span class="fw-medium text-white">Confirmación Inmediata</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-shield-alt" style="color: #2DD4BF;"></i>
+                                <span class="fw-medium text-white">Cifrado AES-128</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-clock" style="color: #2DD4BF;"></i>
+                                <span class="fw-medium text-white">Sin Tiempos de Espera</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Hero Column: Double-Bezel Glass Card -->
+                <div class="col-lg-5">
+                    <div class="reveal-on-scroll" style="transition-delay: 150ms;">
+                        <div class="hero-card-glass">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge" style="background: #F0FDFA; color: var(--accent-teal); border: 1px solid var(--accent-teal-border); border-radius: 9999px; padding: 0.4rem 0.85rem; font-weight: 700;">
+                                    <i class="fas fa-clinic-medical me-1"></i>
+                                    {% if config %}{{ config.nombre_consultorio }}{% else %}Dental Clinic{% endif %}
+                                </span>
+                                <span class="badge" style="background: #ECFDF5; color: #059669; border: 1px solid #A7F3D0; border-radius: 9999px; padding: 0.35rem 0.75rem; font-weight: 600; font-size: 0.75rem;">
+                                    ● Citas Disponibles
+                                </span>
+                            </div>
+
+                            <h4 class="fw-bold mb-1 tracking-tight-titles" style="color: var(--text-main);">
+                                {% if config %}{{ config.nombre_dentista }}{% else %}Dr. Odontólogo Especialista{% endif %}
+                            </h4>
+                            <p class="text-muted small mb-4">
+                                <i class="fas fa-map-marker-alt text-danger me-1"></i>
+                                {% if config %}{{ config.direccion }}{% else %}Ubicación céntrica del consultorio{% endif %}
+                            </p>
+
+                            <!-- Feature List Inside Core -->
+                            <div class="d-flex flex-column gap-2 mb-4 p-3 rounded-4" style="background: #F8FAFC; border: 1px solid var(--border-hairline);">
+                                <div class="d-flex align-items-center gap-2 small text-secondary">
+                                    <i class="fas fa-check text-success"></i>
+                                    <span>Selección de horario autónoma en vivo</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 small text-secondary">
+                                    <i class="fas fa-check text-success"></i>
+                                    <span>Notificaciones y recordatorios al instante</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 small text-secondary">
+                                    <i class="fas fa-check text-success"></i>
+                                    <span>Cancelación y reagendamiento sin llamadas</span>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'citas:agendar' %}" class="btn-island-primary justify-content-center">
+                                    <span>Elegir Horario de Cita</span>
+                                    <span class="btn-icon-core" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                        <i class="fas fa-calendar-plus"></i>
+                                    </span>
+                                </a>
+                                {% if config and config.telefono %}
+                                <a href="tel:{{ config.telefono }}" class="btn-island-ghost justify-content-center py-2 small">
+                                    <i class="fas fa-phone-alt text-muted"></i>
+                                    <span>Llamar al {{ config.telefono }}</span>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================
+     2. TRUST & ASSURANCE METRIC CARDS
+     ========================================================= -->
+<section class="py-4">
+    <div class="container">
+        <div class="row g-3">
+            <div class="col-6 col-lg-3">
+                <div class="metric-card reveal-on-scroll">
+                    <div class="metric-icon-badge badge-teal-tint">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1 text-dark">Reserva 24/7</h6>
+                        <p class="text-muted small mb-0">Agenda en tiempo real sin llamadas ni esperas telefónicas.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="metric-card reveal-on-scroll" style="transition-delay: 80ms;">
+                    <div class="metric-icon-badge badge-emerald-tint">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1 text-dark">Cifrado Médico</h6>
+                        <p class="text-muted small mb-0">Protección Fernet/AES-128 para tus datos sensibles.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="metric-card reveal-on-scroll" style="transition-delay: 160ms;">
+                    <div class="metric-icon-badge badge-blue-tint">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1 text-dark">Cero Estrés</h6>
+                        <p class="text-muted small mb-0">Técnicas indoloras y ambiente relajante de vanguardia.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="metric-card reveal-on-scroll" style="transition-delay: 240ms;">
+                    <div class="metric-icon-badge badge-amber-tint">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1 text-dark">Especialidad</h6>
+                        <p class="text-muted small mb-0">Materiales y aparatología de última generación.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================
+     3. ASYMMETRICAL BENTO GRID — TREATMENTS
+     ========================================================= -->
+<section id="tratamientos" class="bento-section">
+    <div class="container">
+        <div class="text-center reveal-on-scroll">
+            <span class="section-eyebrow">Tratamientos & Especialidades</span>
+            <h2 class="section-headline">Cuidado integral de tu sonrisa</h2>
+            <p class="section-subtext">
+                Procedimientos personalizados combinando precisión médica, estética armónica y máxima bioseguridad.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Bento Card 1: Featured (Dark Highlight) -->
+            <div class="col-lg-8">
+                <div class="bento-card bento-card-featured reveal-on-scroll">
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <div class="bento-icon">
+                            <i class="fas fa-tooth"></i>
+                        </div>
+                        <span class="badge" style="background: rgba(255, 255, 255, 0.12); color: #FFFFFF; border-radius: 9999px; padding: 0.35rem 0.85rem; font-weight: 600; font-size: 0.78rem;">
+                            Tratamiento Primario
+                        </span>
+                    </div>
+                    <h3 class="bento-title fs-3">Odontología General & Diagnóstico Digital</h3>
+                    <p class="bento-desc fs-6">
+                        Evaluación integral computarizada, detección temprana de afecciones, limpiezas profundas y restauraciones estéticas en resina con acabado natural imperceptible.
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top border-secondary border-opacity-25">
+                        <a href="{% url 'citas:agendar' %}" class="bento-action">
+                            <span>Agendar consulta diagnóstica</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <span class="small text-white-50">Duración aprox. 45 min</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bento Card 2 -->
+            <div class="col-lg-4">
+                <div class="bento-card reveal-on-scroll" style="transition-delay: 100ms;">
+                    <div class="bento-icon">
+                        <i class="fas fa-teeth-open"></i>
+                    </div>
+                    <h3 class="bento-title">Limpieza Ultrasónica & Profilaxis</h3>
+                    <p class="bento-desc">
+                        Eliminación de sarro bacteriano y manchas superficiales con tecnología de ultrasonido sin dolor ni desgaste del esmalte.
+                    </p>
+                    <a href="{% url 'citas:agendar' %}" class="bento-action">
+                        <span>Reservar sesión</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bento Card 3 -->
+            <div class="col-lg-4">
+                <div class="bento-card reveal-on-scroll">
+                    <div class="bento-icon">
+                        <i class="fas fa-smile-beam"></i>
+                    </div>
+                    <h3 class="bento-title">Ortodoncia & Alineadores</h3>
+                    <p class="bento-desc">
+                        Corrección funcional y estética con alineadores invisibles o brackets de autoligado de baja fricción.
+                    </p>
+                    <a href="{% url 'citas:agendar' %}" class="bento-action">
+                        <span>Valorar ortodoncia</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bento Card 4 -->
+            <div class="col-lg-4">
+                <div class="bento-card reveal-on-scroll" style="transition-delay: 100ms;">
+                    <div class="bento-icon">
+                        <i class="fas fa-sparkles"></i>
+                    </div>
+                    <h3 class="bento-title">Blanqueamiento Dental LED</h3>
+                    <p class="bento-desc">
+                        Aclara hasta 4 tonos en una sola sesión con tecnología de luz fría que minimiza la sensibilidad dental.
+                    </p>
+                    <a href="{% url 'citas:agendar' %}" class="bento-action">
+                        <span>Ver opciones estéticas</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bento Card 5 -->
+            <div class="col-lg-4">
+                <div class="bento-card reveal-on-scroll" style="transition-delay: 200ms;">
+                    <div class="bento-icon">
+                        <i class="fas fa-shield-virus"></i>
+                    </div>
+                    <h3 class="bento-title">Endodoncia & Salvamento Dental</h3>
+                    <p class="bento-desc">
+                        Tratamiento de conductos radiculares con instrumental rotatorio y microscopía para conservar tus dientes naturales.
+                    </p>
+                    <a href="{% url 'citas:agendar' %}" class="bento-action">
+                        <span>Consultar endodoncia</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5 reveal-on-scroll">
+            <a href="{% url 'core:servicios' %}" class="btn-island-ghost">
+                <i class="fas fa-th-list text-muted"></i>
+                <span>Explorar Todos los Procedimientos</span>
+                <i class="fas fa-arrow-right small text-muted"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================
+     4. STEP-BY-STEP APPOINTMENT WORKFLOW
+     ========================================================= -->
+<section class="steps-section">
+    <div class="container">
+        <div class="text-center reveal-on-scroll">
+            <span class="section-eyebrow">Flujo Autónomo</span>
+            <h2 class="section-headline">Agendar tu cita toma menos de 2 minutos</h2>
+            <p class="section-subtext">
+                Diseñado para eliminar fricciones y confirmarte el horario ideal al instante.
+            </p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="p-4 rounded-4 reveal-on-scroll" style="background: var(--bg-canvas); border: 1px solid var(--border-hairline);">
+                    <div class="step-pill">01</div>
+                    <h5 class="fw-bold mb-2">Selecciona Fecha y Turno</h5>
+                    <p class="text-muted small mb-0">Visualiza en el calendario interactivo los horarios disponibles en vivo y elige el más conveniente.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 rounded-4 reveal-on-scroll" style="background: var(--bg-canvas); border: 1px solid var(--border-hairline); transition-delay: 100ms;">
+                    <div class="step-pill">02</div>
+                    <h5 class="fw-bold mb-2">Ingresa tu Información</h5>
+                    <p class="text-muted small mb-0">Indica el motivo de tu visita. Todos tus datos médicos y personales son cifrados automáticamente.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 rounded-4 reveal-on-scroll" style="background: var(--bg-canvas); border: 1px solid var(--border-hairline); transition-delay: 200ms;">
+                    <div class="step-pill">03</div>
+                    <h5 class="fw-bold mb-2">Confirmación Inmediata</h5>
+                    <p class="text-muted small mb-0">Recibes el resumen en tu correo con instrucciones previas y acceso para gestionar tu cita 24/7.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5 reveal-on-scroll">
+            <a href="{% url 'citas:agendar' %}" class="btn-island-primary">
+                <span>Comenzar Reserva Ahora</span>
+                <span class="btn-icon-core">
+                    <i class="fas fa-calendar-check"></i>
+                </span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================
+     5. EDITORIAL CLINIC PROFILE & LIVE SCHEDULES
+     ========================================================= -->
+<section class="py-5 my-4">
+    <div class="container py-4">
+        <div class="row g-5 align-items-center">
+            <!-- Left Column: Clinic Imagery -->
+            <div class="col-lg-6">
+                <div class="reveal-on-scroll">
+                    <div class="about-media-container">
+                        <img src="/media/images/about.jpeg" alt="Instalaciones de {% if config %}{{ config.nombre_consultorio }}{% else %}Dental Clinic{% endif %}" loading="lazy">
+                        <div class="floating-media-badge">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="brand-icon-box" style="background: #F0FDFA; color: var(--accent-teal); border: 1px solid var(--accent-teal-border);">
+                                    <i class="fas fa-certificate"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-0 text-dark">Instalaciones & Bioseguridad Certificada</h6>
+                                    <small class="text-muted">Esterilización hospitalaria y ambiente esterilizado</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Doctor Profile & Live Operating Hours -->
+            <div class="col-lg-6">
+                <div class="reveal-on-scroll" style="transition-delay: 150ms;">
+                    <span class="section-eyebrow">Nuestro Consultorio</span>
+                    <h2 class="section-headline mb-3">Atención personalizada, ética y transparente</h2>
+                    <p class="text-muted mb-4">
+                        Creemos en una odontología cercana y sin prisas. Cada paciente recibe un plan de tratamiento honesto, explicado paso a paso y adaptado a sus necesidades reales.
+                    </p>
+
+                    <!-- Doctor & Contact Info -->
+                    <div class="d-flex flex-column gap-3 mb-4">
+                        <div class="d-flex align-items-center gap-3 p-3 rounded-4" style="background: #FFFFFF; border: 1px solid var(--border-hairline);">
+                            <div class="avatar-initials" style="background: #F0FDFA; color: var(--accent-teal);">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0">{% if config %}{{ config.nombre_dentista }}{% else %}Dr. Odontólogo Titular{% endif %}</h6>
+                                <small class="text-muted">Cirujano Dentista / Especialista Certificado</small>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3 p-3 rounded-4" style="background: #FFFFFF; border: 1px solid var(--border-hairline);">
+                            <div class="avatar-initials" style="background: #FEF2F2; color: #DC2626;">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0">Ubicación</h6>
+                                <small class="text-muted">{% if config %}{{ config.direccion }}{% else %}Consulte la dirección del consultorio{% endif %}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Schedules Widget -->
+                    <div class="schedule-widget">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold mb-0 text-dark">
+                                <i class="far fa-clock text-muted me-2"></i>Horarios de Atención
+                            </h6>
+                            <span class="badge" style="background: #ECFDF5; color: #059669; border: 1px solid #A7F3D0; border-radius: 9999px; padding: 0.3rem 0.75rem; font-weight: 600; font-size: 0.75rem;">
+                                ● Horarios en Vivo
+                            </span>
+                        </div>
+
+                        {% if horarios %}
+                            {% for h in horarios %}
+                            <div class="schedule-row">
+                                <span class="fw-medium text-secondary">{{ h.get_dia_display }}</span>
+                                {% if h.activo %}
+                                    <span class="fw-bold text-dark font-monospace small">{{ h.hora_apertura|time:"H:i" }} - {{ h.hora_cierre|time:"H:i" }}</span>
+                                {% else %}
+                                    <span class="badge" style="background: #F1F5F9; color: #64748B; border-radius: 9999px; font-size: 0.75rem;">Cerrado</span>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="schedule-row">
+                                <span class="fw-medium text-secondary">Lunes a Viernes</span>
+                                <span class="fw-bold text-dark font-monospace small">09:00 - 18:00</span>
+                            </div>
+                            <div class="schedule-row">
+                                <span class="fw-medium text-secondary">Sábado y Domingo</span>
+                                <span class="badge" style="background: #F1F5F9; color: #64748B; border-radius: 9999px; font-size: 0.75rem;">Cerrado</span>
+                            </div>
+                        {% endif %}
+
+                        <div class="mt-4">
+                            <a href="{% url 'citas:agendar' %}" class="btn-island-primary w-100 justify-content-center">
+                                <span>Agendar en estos Horarios</span>
+                                <span class="btn-icon-core" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                    <i class="fas fa-arrow-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================
+     6. PATIENT TESTIMONIALS
+     ========================================================= -->
+<section class="py-5" style="background: #FFFFFF; border-top: 1px solid var(--border-hairline); border-bottom: 1px solid var(--border-hairline);">
+    <div class="container py-4">
+        <div class="text-center reveal-on-scroll">
+            <span class="section-eyebrow">Testimonios Reales</span>
+            <h2 class="section-headline">La voz de nuestros pacientes</h2>
+            <p class="section-subtext">
+                Experiencias comprobadas de personas que han confiado su salud bucal en nosotros.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="testimonial-card reveal-on-scroll">
+                    <div>
+                        <div class="rating-stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="quote-text">
+                            "El sistema para agendar cita por internet es una maravilla. Llegué al consultorio sin hacer filas y la atención del doctor fue sumamente cuidadosa e indolora."
+                        </p>
+                    </div>
+                    <div class="d-flex align-items-center gap-3 pt-3 border-top border-light">
+                        <div class="avatar-initials">MC</div>
+                        <div>
+                            <h6 class="fw-bold mb-0 small text-dark">María Camila R.</h6>
+                            <small class="text-muted">Limpieza Ultrasónica</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="testimonial-card reveal-on-scroll" style="transition-delay: 100ms;">
+                    <div>
+                        <div class="rating-stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="quote-text">
+                            "Tenía mucho recelo con los tratamientos dentales por malas experiencias pasadas. Aquí me explicaron todo con calma y el blanqueamiento quedó espectacular."
+                        </p>
+                    </div>
+                    <div class="d-flex align-items-center gap-3 pt-3 border-top border-light">
+                        <div class="avatar-initials">JG</div>
+                        <div>
+                            <h6 class="fw-bold mb-0 small text-dark">Jorge González</h6>
+                            <small class="text-muted">Estética & Blanqueamiento</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="testimonial-card reveal-on-scroll" style="transition-delay: 200ms;">
+                    <div>
+                        <div class="rating-stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="quote-text">
+                            "Puntualidad impecable y consultorio impecablemente limpio. Poder cancelar o reagendar desde mi cuenta da muchísima tranquilidad ante imprevistos de trabajo."
+                        </p>
+                    </div>
+                    <div class="d-flex align-items-center gap-3 pt-3 border-top border-light">
+                        <div class="avatar-initials">SL</div>
+                        <div>
+                            <h6 class="fw-bold mb-0 small text-dark">Sofía Lozano</h6>
+                            <small class="text-muted">Odontología Preventiva</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================
+     7. FREQUENT QUESTIONS (MINIMALIST ACCORDION)
+     ========================================================= -->
+<section class="py-5 my-4">
+    <div class="container py-4">
+        <div class="text-center reveal-on-scroll">
+            <span class="section-eyebrow">Dudas Habituales</span>
+            <h2 class="section-headline">Preguntas Frecuentes</h2>
+            <p class="section-subtext">
+                Todo lo que necesitas saber antes de tu primera visita.
+            </p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="reveal-on-scroll">
+                    <!-- FAQ Item 1 -->
+                    <div class="faq-item">
+                        <button class="faq-trigger" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true">
+                            <span>¿Cómo se confirma mi cita y qué recibo?</span>
+                            <span class="faq-icon"><i class="fas fa-plus"></i></span>
+                        </button>
+                        <div id="faq1" class="collapse show faq-content">
+                            Al seleccionar tu horario e ingresar tus datos, nuestro sistema reserva tu espacio al instante y te envía un correo electrónico de confirmación con la fecha, hora y ubicación exacta.
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 2 -->
+                    <div class="faq-item">
+                        <button class="faq-trigger" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false">
+                            <span>¿Puedo cancelar o reagendar si surge un imprevisto?</span>
+                            <span class="faq-icon"><i class="fas fa-plus"></i></span>
+                        </button>
+                        <div id="faq2" class="collapse faq-content">
+                            Por supuesto. Desde la sección <strong>Mis Citas</strong> en tu cuenta de paciente, puedes cancelar tu cita en cualquier momento con un solo clic para liberar el horario.
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 3 -->
+                    <div class="faq-item">
+                        <button class="faq-trigger" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false">
+                            <span>¿Cómo protegen mi información y motivo de consulta?</span>
+                            <span class="faq-icon"><i class="fas fa-plus"></i></span>
+                        </button>
+                        <div id="faq3" class="collapse faq-content">
+                            Toda tu información personal y médica se almacena cifrada a nivel de base de datos utilizando el estándar criptográfico Fernet / AES-128. Nadie ajeno a la consulta puede acceder a tus registros.
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 4 -->
+                    <div class="faq-item">
+                        <button class="faq-trigger" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false">
+                            <span>¿Qué métodos de pago aceptan en el consultorio?</span>
+                            <span class="faq-icon"><i class="fas fa-plus"></i></span>
+                        </button>
+                        <div id="faq4" class="collapse faq-content">
+                            Aceptamos pagos en efectivo, tarjetas de débito/crédito (Visa, Mastercard, American Express) y transferencias bancarias el día de tu consulta en recepción.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================
+     8. CLOSING DOUBLE-BEZEL CALL TO ACTION
+     ========================================================= -->
+<section class="py-5">
+    <div class="container">
+        <div class="cta-outer-shell reveal-on-scroll">
+            <div class="cta-inner-core">
+                <div class="row align-items-center g-4">
+                    <div class="col-lg-8 text-center text-lg-start">
+                        <span class="badge mb-3" style="background: rgba(45, 212, 191, 0.15); color: #2DD4BF; border: 1px solid rgba(45, 212, 191, 0.3); border-radius: 9999px; padding: 0.4rem 0.9rem; font-weight: 700;">
+                            Atención Inmediata
+                        </span>
+                        <h2 class="fw-bold mb-3 text-white tracking-tight-titles fs-1">
+                            ¿Listo para dar el paso hacia una sonrisa saludable?
+                        </h2>
+                        <p class="text-white-50 mb-0 fs-6" style="max-width: 540px;">
+                            Selecciona tu horario disponible hoy mismo y comprueba una experiencia odontológica de vanguardia, cómoda y sin esperas.
+                        </p>
+                    </div>
+                    <div class="col-lg-4 text-center text-lg-end">
+                        <a href="{% url 'citas:agendar' %}" class="btn-island-primary justify-content-center" style="background: #FFFFFF; color: var(--text-main) !important;">
+                            <span>Reservar Mi Cita Online</span>
+                            <span class="btn-icon-core" style="background: rgba(15, 23, 42, 0.08); color: var(--text-main);">
+                                <i class="fas fa-arrow-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Smooth Scroll Entry Animations via IntersectionObserver (High Performance GPU only)
+    document.addEventListener('DOMContentLoaded', function () {
+        const revealElements = document.querySelectorAll('.reveal-on-scroll');
+
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-revealed');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, {
+                root: null,
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            revealElements.forEach(el => observer.observe(el));
+        } else {
+            // Fallback for older browsers
+            revealElements.forEach(el => el.classList.add('is-revealed'));
+        }
+
+        // Accordion Icon Toggle
+        const faqTriggers = document.querySelectorAll('.faq-trigger');
+        faqTriggers.forEach(btn => {
+            const collapseElement = document.querySelector(btn.getAttribute('data-bs-target'));
+            if (collapseElement) {
+                collapseElement.addEventListener('show.bs.collapse', () => {
+                    btn.setAttribute('aria-expanded', 'true');
+                });
+                collapseElement.addEventListener('hide.bs.collapse', () => {
+                    btn.setAttribute('aria-expanded', 'false');
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

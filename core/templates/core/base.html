@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Consultorio Dental{% endblock %}</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans & Instrument Serif -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5.3 & FontAwesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <style>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --bg-canvas: #FAFAF9;
+            --bg-surface: #FFFFFF;
+            --bg-subtle: #F4F4F5;
+            
+            --text-main: #0F172A;
+            --text-body: #334155;
+            --text-muted: #64748B;
+            --text-subtle: #94A3B8;
+            
+            --border-hairline: rgba(0, 0, 0, 0.07);
+            --border-subtle: #E2E8F0;
+            --border-focus: #0D9488;
+            
+            --accent-teal: #0D9488;
+            --accent-teal-dark: #0F766E;
+            --accent-teal-light: #F0FDFA;
+            --accent-teal-border: #CCFBF1;
+            
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --radius-full: 9999px;
+            
+            --shadow-ambient: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 10px 30px -4px rgba(15, 23, 42, 0.04);
+            --shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 20px 40px -8px rgba(15, 23, 42, 0.08);
+            --shadow-float: 0 20px 50px -10px rgba(15, 23, 42, 0.12);
+            
+            --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-canvas);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Floating Island Navbar */
+        .nav-wrapper {
+            position: sticky;
+            top: 1rem;
+            z-index: 1050;
+            padding: 0 1rem;
+            margin-bottom: -1rem;
+        }
+
+        .navbar-floating {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-hairline);
+            border-radius: var(--radius-full);
+            padding: 0.6rem 1.4rem;
+            box-shadow: 0 8px 32px rgba(15, 23, 42, 0.06);
+            transition: all 0.4s var(--ease-spring);
+        }
+
+        .navbar-floating .navbar-brand {
+            font-weight: 800;
+            font-size: 1.15rem;
+            letter-spacing: -0.03em;
+            color: var(--text-main) !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .brand-icon-box {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.15);
+        }
+
+        .navbar-floating .nav-link {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-muted) !important;
+            padding: 0.5rem 0.9rem !important;
+            border-radius: var(--radius-full);
+            transition: all 0.25s var(--ease-spring);
+        }
+
+        .navbar-floating .nav-link:hover {
+            color: var(--text-main) !important;
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        /* Nav CTA Button */
+        .btn-nav-cta {
+            background: var(--text-main);
+            color: #FFFFFF !important;
+            font-weight: 700;
+            font-size: 0.88rem;
+            padding: 0.55rem 1.15rem;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            transition: all 0.3s var(--ease-spring);
+            text-decoration: none;
+        }
+
+        .btn-nav-cta:hover {
+            background: #1E293B;
+            transform: scale(0.98);
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.15);
+            color: #FFFFFF !important;
+        }
+
+        .btn-nav-cta:active {
+            transform: scale(0.95);
+        }
+
+        .btn-nav-outline {
+            color: var(--text-main) !important;
+            font-weight: 600;
+            font-size: 0.88rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-hairline);
+            background: rgba(255, 255, 255, 0.6);
+            transition: all 0.25s var(--ease-spring);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-nav-outline:hover {
+            background: #FFFFFF;
+            border-color: #CBD5E1;
+            color: var(--text-main) !important;
+        }
+
+        /* Alert Messages */
+        .alert-messages {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            z-index: 2000;
+            max-width: 420px;
+        }
+
+        .alert-custom {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-hairline);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-float);
+            padding: 1rem 1.25rem;
+            color: var(--text-main);
+            font-size: 0.92rem;
+            font-weight: 500;
+        }
+
+        /* Minimalist Footer */
+        .footer-minimal {
+            background: #FFFFFF;
+            border-top: 1px solid var(--border-hairline);
+            padding: 4.5rem 0 3rem 0;
+            margin-top: 5rem;
+            position: relative;
+        }
+
+        .footer-brand-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            max-width: 320px;
+        }
+
+        .footer-heading {
+            font-size: 0.82rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.65rem;
+        }
+
+        .footer-links a {
+            color: var(--text-body);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-teal);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-hairline);
+            margin-top: 3.5rem;
+            padding-top: 2rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .flatpickr-calendar { font-family: var(--font-sans); border-radius: var(--radius-md); box-shadow: var(--shadow-float); }
+
+        @media (max-width: 991px) {
+            .navbar-floating {
+                border-radius: var(--radius-lg);
+                padding: 0.75rem 1rem;
+            }
+            .nav-wrapper {
+                top: 0.5rem;
+                padding: 0 0.5rem;
+            }
+            .navbar-collapse {
+                background: #FFFFFF;
+                border-radius: var(--radius-md);
+                padding: 1rem;
+                margin-top: 0.75rem;
+                border: 1px solid var(--border-hairline);
+                box-shadow: var(--shadow-ambient);
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Floating Island Navbar -->
+    <div class="nav-wrapper">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-floating">
+                <a class="navbar-brand" href="{% url 'core:index' %}">
+                    <span class="brand-icon-box">
+                        <i class="fas fa-tooth"></i>
+                    </span>
+                    <span>Dental Clinic</span>
+                </a>
+
+                <button class="navbar-toggler border-0 shadow-none p-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars text-dark fs-5"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto align-items-lg-center gap-1">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'core:index' %}">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'core:servicios' %}">Servicios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'core:contacto' %}">Contacto</a>
+                        </li>
+                        {% if user.is_authenticated %}
+                            {% if user.is_staff %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'citas:dashboard' %}">Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'citas:bloquear_horario' %}">Bloqueos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'configuracion:configuracion' %}">Configuración</a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'citas:mis_citas' %}">Mis Citas</a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+
+                    <div class="d-flex align-items-center gap-2 pt-2 pt-lg-0">
+                        {% if user.is_authenticated %}
+                            <form method="POST" action="{% url 'usuarios:logout' %}" class="d-inline m-0">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-nav-outline">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Cerrar Sesión</span>
+                                </button>
+                            </form>
+                        {% else %}
+                            <a href="{% url 'usuarios:login' %}" class="btn-nav-outline">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Ingresar</span>
+                            </a>
+                            <a href="{% url 'citas:agendar' %}" class="btn-nav-cta">
+                                <span>Agendar Cita</span>
+                                <i class="fas fa-arrow-right small"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="alert-messages">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-custom alert-dismissible fade show" role="alert">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-check-circle text-teal" style="color: var(--accent-teal);"></i>
+                        <div>{{ message }}</div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Minimalist Editorial Footer -->
+    <footer class="footer-minimal">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-4">
+                    <div class="footer-brand-title">
+                        <span class="brand-icon-box" style="width: 28px; height: 28px; font-size: 0.8rem;">
+                            <i class="fas fa-tooth"></i>
+                        </span>
+                        <span>Dental Clinic</span>
+                    </div>
+                    <p class="footer-desc">
+                        Atención odontológica integral, estética y preventiva bajo estrictos estándares de bioseguridad y protección médica de datos.
+                    </p>
+                    <div class="d-flex align-items-center gap-2 text-muted small">
+                        <span class="badge" style="background: #F0FDFA; color: var(--accent-teal); border: 1px solid var(--accent-teal-border); border-radius: 9999px; padding: 0.35rem 0.75rem; font-weight: 600;">
+                            <i class="fas fa-shield-alt me-1"></i> Cifrado AES-128 Activo
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3 col-lg-2 offset-lg-1">
+                    <h6 class="footer-heading">Navegación</h6>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'core:index' %}">Inicio</a></li>
+                        <li><a href="{% url 'core:servicios' %}">Tratamientos</a></li>
+                        <li><a href="{% url 'core:contacto' %}">Ubicación y Contacto</a></li>
+                        <li><a href="{% url 'citas:agendar' %}">Reservar Cita</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h6 class="footer-heading">Pacientes & Legal</h6>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'usuarios:login' %}">Portal de Pacientes</a></li>
+                        <li><a href="{% url 'usuarios:registro' %}">Crear Cuenta</a></li>
+                        <li><a href="{% url 'citas:mis_citas' %}">Consultar Mis Citas</a></li>
+                        <li><a href="{% url 'core:terminos' %}">Términos de Uso</a></li>
+                        <li><a href="{% url 'core:privacidad' %}">Aviso de Privacidad</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <h6 class="footer-heading">Contacto Directo</h6>
+                    <div class="d-flex flex-column gap-2 text-muted small">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fas fa-phone-alt text-dark"></i>
+                            <span class="text-body fw-medium">+52 55 1234 5678</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fas fa-envelope text-dark"></i>
+                            <span class="text-body fw-medium">contacto@dentalclinic.com</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fas fa-map-marker-alt text-dark"></i>
+                            <span>Atención previa cita programada</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div>&copy; 2026 Dental Clinic. Todos los derechos reservados.</div>
+                <div class="d-flex align-items-center gap-3">
+                    <a href="{% url 'core:terminos' %}" class="text-muted text-decoration-none">Términos y Condiciones</a>
+                    <span class="text-muted opacity-50">•</span>
+                    <a href="{% url 'core:privacidad' %}" class="text-muted text-decoration-none">Política de Privacidad</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Flatpickr Core & Locale -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var locale = (flatpickr.l10ns && flatpickr.l10ns.es) ? 'es' : 'default';
+            document.querySelectorAll('input[type="date"]:not([data-custom-flatpickr])').forEach(function(el) {
+                flatpickr(el, {
+                    locale: locale,
+                    dateFormat: 'Y-m-d',
+                    altInput: true,
+                    altFormat: 'd/m/Y',
+                    allowInput: true,
+                    disableMobile: true
+                });
+            });
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

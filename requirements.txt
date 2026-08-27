@@ -1,0 +1,5 @@
+django==5.2.9
+psycopg2-binary
+
+# Cifrado de campos sensibles (Fernet / AES-128)
+cryptography>=42.0.0

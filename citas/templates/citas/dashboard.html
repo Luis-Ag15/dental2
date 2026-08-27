@@ -1,0 +1,222 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard Médico - Dental Clinic{% endblock %}
+
+{% block extra_css %}
+<style>
+    .flatpickr-day.has-citas {
+        position: relative !important;
+        font-weight: 700 !important;
+        color: #2c3e7a !important;
+    }
+    .flatpickr-day .cita-indicator-dot {
+        position: absolute;
+        bottom: 3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: #0d6efd;
+        display: block;
+        z-index: 2;
+        pointer-events: none;
+    }
+    .flatpickr-day.selected .cita-indicator-dot,
+    .flatpickr-day.startRange .cita-indicator-dot,
+    .flatpickr-day.endRange .cita-indicator-dot {
+        background-color: #2ecc71 !important;
+    }
+    .flatpickr-day:hover .cita-indicator-dot {
+        background-color: #0b5ed7;
+    }
+    /* Fallback pseudo-element */
+    .flatpickr-day.has-citas::after {
+        content: "";
+        position: absolute;
+        bottom: 3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: #0d6efd;
+        display: block;
+    }
+    .flatpickr-day.has-citas.selected::after {
+        background-color: #2ecc71;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h2 class="mb-0 text-primary"><i class="fas fa-chart-line me-2"></i>Panel de Control Médico</h2>
+        <form method="GET" class="d-flex align-items-center gap-2">
+            <label for="fecha" class="form-label mb-0 fw-bold">Fecha:</label>
+            <input type="date" name="fecha" id="fecha" class="form-control"
+                   data-custom-flatpickr value="{{ fecha_str }}">
+            <a href="{% url 'citas:dashboard' %}" class="btn btn-outline-secondary btn-sm">Hoy</a>
+        </form>
+    </div>
+
+    <div class="row g-4">
+        <!-- Citas del día -->
+        <div class="col-12">
+            <div class="card card-shadow mb-4">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-calendar-day me-2"></i>Citas para {{ fecha|date:"d/m/Y" }}</h5>
+                    <span class="badge bg-light text-primary">{{ citas_dia|length }} Cita(s)</span>
+                </div>
+                <div class="card-body">
+                    {% if citas_dia %}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Horario</th>
+                                    <th>Paciente</th>
+                                    <th>Teléfono</th>
+                                    <th>Motivo</th>
+                                    <th>Estado</th>
+                                    <th>Acción</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cita in citas_dia %}
+                                <tr>
+                                    <td><strong>{{ cita.hora_inicio|time:"H:i" }} - {{ cita.hora_fin|time:"H:i" }}</strong></td>
+                                    <td>{{ cita.usuario.nombre }}<br><small class="text-muted">{{ cita.usuario.email }}</small></td>
+                                    <td>{{ cita.usuario.telefono }}</td>
+                                    <td>{{ cita.motivo|truncatechars:30 }}</td>
+                                    <td>
+                                        <span class="badge bg-{% if cita.estado == 'CONFIRMADA' %}success{% elif cita.estado == 'PENDIENTE' %}warning text-dark{% elif cita.estado == 'CANCELADA' %}danger{% elif cita.estado == 'ATENDIDA' %}info{% else %}secondary{% endif %}">
+                                            {{ cita.get_estado_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <form method="POST" action="{% url 'citas:cambiar_estado' cita.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <select name="estado" class="form-select form-select-sm d-inline-block w-auto" onchange="this.form.submit()">
+                                                <option value="" disabled selected>Cambiar...</option>
+                                                <option value="PENDIENTE">Pendiente</option>
+                                                <option value="CONFIRMADA">Confirmada</option>
+                                                <option value="ATENDIDA">Atendida</option>
+                                                <option value="CANCELADA">Cancelada</option>
+                                                <option value="NO_ASISTIO">No Asistió</option>
+                                            </select>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form method="POST" action="{% url 'citas:eliminar_cita' cita.id %}" class="d-inline form-eliminar-cita">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-outline-danger btn-sm" title="Eliminar cita">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info mb-0">
+                        <i class="fas fa-info-circle me-2"></i>No hay citas agendadas para esta fecha.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal confirmación eliminar cita -->
+<div class="modal fade" id="modalEliminarCita" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title"><i class="fas fa-trash me-2"></i>Eliminar Cita</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar esta cita? <strong>Esta acción no se puede deshacer.</strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
+          <i class="fas fa-trash me-1"></i> Sí, eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Confirmar antes de eliminar una cita (modal Bootstrap)
+    var citaFormPendiente = null;
+
+    document.querySelectorAll('.form-eliminar-cita').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            citaFormPendiente = form;
+            new bootstrap.Modal(document.getElementById('modalEliminarCita')).show();
+        });
+    });
+
+    document.getElementById('btnConfirmarEliminar').addEventListener('click', function() {
+        if (citaFormPendiente) {
+            citaFormPendiente.submit();
+            citaFormPendiente = null;
+        }
+    });
+
+    // Flatpickr para el selector de fecha del dashboard (auto-submit al cambiar)
+    document.addEventListener('DOMContentLoaded', function () {
+        var inputFecha = document.getElementById('fecha');
+        if (inputFecha) {
+            var locale = (flatpickr.l10ns && flatpickr.l10ns.es) ? 'es' : 'default';
+            var fechasConCitas = JSON.parse('{{ fechas_con_citas_json|escapejs }}' || '{}');
+
+            flatpickr(inputFecha, {
+                locale: locale,
+                dateFormat: 'Y-m-d',
+                altInput: true,
+                altFormat: 'd/m/Y',
+                allowInput: true,
+                disableMobile: true,
+                defaultDate: inputFecha.value || null,
+                onDayCreate: function (dObj, dStr, fp, dayElem) {
+                    var dateObj = dayElem.dateObj;
+                    if (!dateObj) return;
+                    var year = dateObj.getFullYear();
+                    var month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                    var day = String(dateObj.getDate()).padStart(2, '0');
+                    var key = year + '-' + month + '-' + day;
+                    if (fechasConCitas && fechasConCitas[key]) {
+                        dayElem.classList.add('has-citas');
+                        var count = fechasConCitas[key];
+                        dayElem.setAttribute('title', count + (count === 1 ? ' cita agendada' : ' citas agendadas'));
+                        if (!dayElem.querySelector('.cita-indicator-dot')) {
+                            var dot = document.createElement('span');
+                            dot.className = 'cita-indicator-dot';
+                            dayElem.appendChild(dot);
+                        }
+                    }
+                },
+                onChange: function (selectedDates, dateStr) {
+                    inputFecha.closest('form').submit();
+                }
+            });
+        }
+    });
+
+</script>
+{% endblock %}

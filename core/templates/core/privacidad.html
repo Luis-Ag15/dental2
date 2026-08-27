@@ -1,0 +1,231 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Política de Privacidad - Dental Clinic{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header / Hero Section -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-10 text-center">
+            <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill" 
+                 style="background: var(--accent-teal-light); border: 1px solid var(--accent-teal-border); color: var(--accent-teal); font-size: 0.85rem; font-weight: 600;">
+                <i class="fas fa-shield-alt"></i> Seguridad y Protección de Datos Médicos
+            </div>
+            <h1 class="display-5 fw-bold text-dark mb-3" style="letter-spacing: -0.02em;">
+                Política de Privacidad y Aviso de Datos
+            </h1>
+            <p class="lead text-muted mx-auto" style="max-width: 680px;">
+                Conoce cómo protegemos, ciframos y tratamos tu información personal y clínica en {% if config %}{{ config.nombre_consultorio }}{% else %}Dental Clinic{% endif %}.
+            </p>
+            <div class="text-muted small">
+                <i class="far fa-calendar-check me-1"></i> Última actualización: 26 de agosto de 2026
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row justify-content-center g-4">
+        <!-- Sidebar Navigation / Highlights -->
+        <div class="col-lg-3 col-md-4">
+            <div class="sticky-top" style="top: 6rem; z-index: 10;">
+                <div class="p-3 bg-white rounded-4 shadow-sm border" style="border-color: var(--border-subtle) !important;">
+                    <h6 class="fw-bold text-dark mb-3 small text-uppercase tracking-wider">
+                        <i class="fas fa-list-ul me-2 text-teal" style="color: var(--accent-teal);"></i> Secciones del Aviso
+                    </h6>
+                    <nav class="nav flex-column gap-1 small">
+                        <a class="nav-link px-2 py-1 text-secondary rounded text-decoration-none" href="#responsable">1. Responsable del Tratamiento</a>
+                        <a class="nav-link px-2 py-1 text-secondary rounded text-decoration-none" href="#datos">2. Datos Recopilados</a>
+                        <a class="nav-link px-2 py-1 text-secondary rounded text-decoration-none" href="#cifrado">3. Seguridad y Cifrado AES</a>
+                        <a class="nav-link px-2 py-1 text-secondary rounded text-decoration-none" href="#finalidades">4. Finalidades del Uso</a>
+                        <a class="nav-link px-2 py-1 text-secondary rounded text-decoration-none" href="#transferencias">5. No Transferencia a Terceros</a>
+                        <a class="nav-link px-2 py-1 text-secondary rounded text-decoration-none" href="#derechos-arco">6. Derechos ARCO</a>
+                        <a class="nav-link px-2 py-1 text-secondary rounded text-decoration-none" href="#cookies">7. Uso de Cookies Técnicas</a>
+                    </nav>
+
+                    <hr class="my-3 opacity-10">
+
+                    <!-- Security Pill Card -->
+                    <div class="p-3 rounded-3" style="background: #F0FDFA; border: 1px solid var(--accent-teal-border);">
+                        <div class="d-flex align-items-center gap-2 mb-1 text-dark fw-bold small" style="color: var(--accent-teal-dark) !important;">
+                            <i class="fas fa-lock text-teal" style="color: var(--accent-teal);"></i> Cifrado de Campo Activo
+                        </div>
+                        <p class="text-muted mb-0" style="font-size: 0.78rem;">
+                            Tu nombre, teléfono y motivos de consulta se encriptan mediante <strong>Fernet AES-128</strong> antes de almacenarse en la base de datos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Body -->
+        <div class="col-lg-8 col-md-8">
+            <div class="bg-white p-4 p-md-5 rounded-4 shadow-sm border" style="border-color: var(--border-subtle) !important;">
+                
+                <p class="text-body lh-lg mb-4">
+                    En <strong>{% if config %}{{ config.nombre_consultorio }}{% else %}Dental Clinic{% endif %}</strong>, la privacidad y la confidencialidad médica de nuestros pacientes son pilares fundamentales. Este documento detalla cómo salvaguardamos tu información conforme a los más altos estándares tecnológicos y normativos de protección de datos personales.
+                </p>
+
+                <!-- Section 1 -->
+                <section id="responsable" class="mb-5">
+                    <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-dark rounded-circle" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">1</span>
+                        Identidad del Responsable
+                    </h4>
+                    <div class="p-3 rounded-3" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
+                        <div class="row g-2 small">
+                            <div class="col-sm-6">
+                                <span class="text-muted d-block">Consultorio / Titular:</span>
+                                <strong class="text-dark">{% if config %}{{ config.nombre_consultorio }}{% else %}Dental Clinic{% endif %}</strong>
+                            </div>
+                            <div class="col-sm-6">
+                                <span class="text-muted d-block">Profesional a cargo:</span>
+                                <strong class="text-dark">{% if config %}{{ config.nombre_dentista }}{% else %}Dr. Odontólogo Titular{% endif %}</strong>
+                            </div>
+                            <div class="col-sm-6">
+                                <span class="text-muted d-block">Teléfono de atención:</span>
+                                <strong class="text-dark">{% if config %}{{ config.telefono }}{% else %}+52 55 1234 5678{% endif %}</strong>
+                            </div>
+                            <div class="col-sm-6">
+                                <span class="text-muted d-block">Ubicación:</span>
+                                <strong class="text-dark">{% if config %}{{ config.direccion }}{% else %}Consultorio Dental{% endif %}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="my-4 opacity-10">
+
+                <!-- Section 2 -->
+                <section id="datos" class="mb-5">
+                    <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-dark rounded-circle" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">2</span>
+                        Datos Personales y Médicos Recopilados
+                    </h4>
+                    <p class="text-body lh-lg mb-3">
+                        Para la gestión de citas y expedientes odontológicos, recabamos:
+                    </p>
+                    <ul class="text-body lh-lg mb-0">
+                        <li><strong>Datos de Identificación y Contacto:</strong> Nombre completo, correo electrónico (utilizado para iniciar sesión y notificaciones de cuenta) y número telefónico.</li>
+                        <li><strong>Datos de Salud / Médicos (Datos Sensibles):</strong> Motivo de la consulta dental manifestado al reservar y estado de las citas en el historial clínico.</li>
+                        <li><strong>Datos Técnicos de Navegación:</strong> Marcas temporales de acceso y cookies estrictamente necesarias para el inicio de sesión.</li>
+                    </ul>
+                </section>
+
+                <hr class="my-4 opacity-10">
+
+                <!-- Section 3 -->
+                <section id="cifrado" class="mb-5">
+                    <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-dark rounded-circle" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">3</span>
+                        Medidas de Seguridad y Cifrado Criptográfico
+                    </h4>
+                    <p class="text-body lh-lg mb-3">
+                        Implementamos arquitectura de defensa en profundidad para proteger los datos médicos:
+                    </p>
+                    <div class="p-3 mb-3 rounded-3" style="background: #F0FDFA; border: 1px solid var(--accent-teal-border);">
+                        <h6 class="fw-bold mb-2 text-teal" style="color: var(--accent-teal-dark);"><i class="fas fa-key me-2"></i>Cifrado a Nivel de Campo (AES-128 / Fernet)</h6>
+                        <p class="text-muted small mb-0">
+                            A diferencia de sistemas convencionales, los datos de contacto y motivos de consulta se encriptan campo por campo antes de escribirse en disco. En caso de una vulnerabilidad de base de datos no autorizada, la información permanece ilegible e inaccesible sin las claves criptográficas maestras.
+                        </p>
+                    </div>
+                    <ul class="text-body lh-lg mb-0">
+                        <li><strong>Hasheo Robusto de Contraseñas:</strong> Las contraseñas se almacenan procesadas con PBKDF2 y HMAC-SHA256, sin almacenamiento en texto claro.</li>
+                        <li><strong>Verificación de Correo:</strong> Acceso condicionado a verificación mediante tokens seguros de tiempo limitado.</li>
+                    </ul>
+                </section>
+
+                <hr class="my-4 opacity-10">
+
+                <!-- Section 4 -->
+                <section id="finalidades" class="mb-5">
+                    <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-dark rounded-circle" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">4</span>
+                        Finalidades del Tratamiento
+                    </h4>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="p-3 rounded-3 h-100" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
+                                <h6 class="fw-bold text-dark mb-2">Finalidades Principales</h6>
+                                <ul class="text-muted small mb-0 ps-3">
+                                    <li>Creación y administración de tu cuenta.</li>
+                                    <li>Agendamiento, confirmación y recordatorio de citas.</li>
+                                    <li>Prestación del servicio odontológico presencial.</li>
+                                    <li>Integración y archivo del expediente clínico.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 rounded-3 h-100" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
+                                <h6 class="fw-bold text-dark mb-2">Finalidades Secundarias</h6>
+                                <ul class="text-muted small mb-0 ps-3">
+                                    <li>Consejos preventivos de higiene bucal.</li>
+                                    <li>Avisos de mantenimiento de la plataforma.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="my-4 opacity-10">
+
+                <!-- Section 5 -->
+                <section id="transferencias" class="mb-5">
+                    <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-dark rounded-circle" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">5</span>
+                        Transferencia y No Comercialización de Datos
+                    </h4>
+                    <p class="text-body lh-lg mb-0">
+                        <strong>{% if config %}{{ config.nombre_consultorio }}{% else %}Dental Clinic{% endif %} NO comercializa, vende, renta ni cede datos personales a empresas de publicidad o marketing.</strong> Las únicas comunicaciones de información se limitan a proveedores tecnológicos de infraestructura (servidores y servicio SMTP de correo transaccional) bajo estrictos deberes de confidencialidad, y a autoridades competentes cuando exista mandato legal vinculante.
+                    </p>
+                </section>
+
+                <hr class="my-4 opacity-10">
+
+                <!-- Section 6 -->
+                <section id="derechos-arco" class="mb-5">
+                    <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-dark rounded-circle" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">6</span>
+                        Ejercicio de Derechos ARCO
+                    </h4>
+                    <p class="text-body lh-lg mb-3">
+                        Usted tiene derecho a ejercer en cualquier momento sus derechos de <strong>Acceso, Rectificación, Cancelación y Oposición (ARCO)</strong> respecto a sus datos personales:
+                    </p>
+                    <div class="row g-2 mb-3 small">
+                        <div class="col-6 col-md-3">
+                            <div class="p-2 border rounded text-center bg-light"><strong>Acceso:</strong> Consultar tus datos.</div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="p-2 border rounded text-center bg-light"><strong>Rectificación:</strong> Corregir información.</div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="p-2 border rounded text-center bg-light"><strong>Cancelación:</strong> Solicitar borrado.</div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="p-2 border rounded text-center bg-light"><strong>Oposición:</strong> Oponerse al uso.</div>
+                        </div>
+                    </div>
+                    <p class="text-body small mb-0">
+                        Para ejercer sus derechos, comuníquese con nuestro consultorio a través de los canales oficiales de contacto indicando su nombre y la solicitud específica.
+                    </p>
+                </section>
+
+                <hr class="my-4 opacity-10">
+
+                <!-- Section 7 -->
+                <section id="cookies">
+                    <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-dark rounded-circle" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">7</span>
+                        Uso de Cookies y Tecnologías de Sesión
+                    </h4>
+                    <p class="text-body lh-lg mb-0">
+                        La plataforma utiliza exclusivamente cookies técnicas requeridas para el funcionamiento seguro:
+                        <code>sessionid</code> (gestión de inicio de sesión) y <code>csrftoken</code> (prevención de ataques CSRF). No utilizamos rastreadores invasivos de comportamiento ni cookies de redes publicitarias de terceros.
+                    </p>
+                </section>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

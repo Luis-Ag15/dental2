@@ -1,0 +1,93 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Servicios - Dental Clinic{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary"><i class="fas fa-briefcase me-2"></i>Nuestros Servicios</h1>
+        <p class="lead text-muted">Ofrecemos tratamientos odontológicos de vanguardia para toda la familia.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-shadow h-100 p-3">
+                <div class="card-body text-center">
+                    <div class="mb-3 text-primary">
+                        <i class="fas fa-tooth fa-3x"></i>
+                    </div>
+                    <h4 class="card-title">Odontología General</h4>
+                    <p class="card-text text-muted">Revisiones integrales, obturaciones estéticas, prevención y diagnóstico temprano de afecciones bucales.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-shadow h-100 p-3">
+                <div class="card-body text-center">
+                    <div class="mb-3 text-primary">
+                        <i class="fas fa-teeth-open fa-3x"></i>
+                    </div>
+                    <h4 class="card-title">Ortodoncia</h4>
+                    <p class="card-text text-muted">Brackets metálicos, estéticos y alineadores invisibles para corregir la posición de tus dientes.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-shadow h-100 p-3">
+                <div class="card-body text-center">
+                    <div class="mb-3 text-primary">
+                        <i class="fas fa-sparkles fa-3x"></i>
+                    </div>
+                    <h4 class="card-title">Blanqueamiento Dental</h4>
+                    <p class="card-text text-muted">Tratamientos avanzados y seguros para devolverle el brillo y color natural a tu sonrisa.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-shadow h-100 p-3">
+                <div class="card-body text-center">
+                    <div class="mb-3 text-primary">
+                        <i class="fas fa-teeth fa-3x"></i>
+                    </div>
+                    <h4 class="card-title">Limpieza y Profilaxis</h4>
+                    <p class="card-text text-muted">Eliminación de sarro y placa bacteriana con ultrasonido para mantener tus encías sanas.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-shadow h-100 p-3">
+                <div class="card-body text-center">
+                    <div class="mb-3 text-primary">
+                        <i class="fas fa-shield-alt fa-3x"></i>
+                    </div>
+                    <h4 class="card-title">Endodoncia</h4>
+                    <p class="card-text text-muted">Tratamiento especializado de conductos para salvar piezas dentales dañadas o infectadas.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-shadow h-100 p-3">
+                <div class="card-body text-center">
+                    <div class="mb-3 text-primary">
+                        <i class="fas fa-hospital-user fa-3x"></i>
+                    </div>
+                    <h4 class="card-title">Implantología</h4>
+                    <p class="card-text text-muted">Reemplazo de piezas ausentes con implantes de titanio de alta durabilidad y estética natural.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="{% url 'citas:agendar' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-calendar-plus me-2"></i>Agenda tu Consulta Hoy
+        </a>
+    </div>
+</div>
+{% endblock %}

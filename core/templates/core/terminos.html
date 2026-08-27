@@ -1,0 +1,190 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Términos y Condiciones - Dental Clinic{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header / Hero Section -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-10 text-center">
+            <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill" 
+                 style="background: var(--accent-teal-light); border: 1px solid var(--accent-teal-border); color: var(--accent-teal); font-size: 0.85rem; font-weight: 600;">
+                <i class="fas fa-file-contract"></i> Marco Legal y de Servicio
+            </div>
+            <h1 class="display-5 fw-bold text-dark mb-3" style="letter-spacing: -0.02em;">
+                Términos y Condiciones de Uso
+            </h1>
+            <p class="lead text-muted mx-auto" style="max-width: 680px;">
+                Condiciones y lineamientos que regulan el uso de la plataforma web, el agendamiento de citas y la atención odontológica en {% if config %}{{ config.nombre_consultorio }}{% else %}Dental Clinic{% endif %}.
+            </p>
+            <div class="text-muted small">
+                <i class="far fa-calendar-check me-1"></i> Última actualización: 26 de agosto de 2026
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row justify-content-center g-4">
+        <!-- Sidebar Navigation / Highlights -->
+        <div class="col-lg-3 col-md-4">
+            <div class="sticky-top" style="top: 6rem; z-index: 10;">
+                <div class="p-3 bg-white rounded-4 shadow-sm border" style="border-color: var(--border-subtle) !important;">
+                    <h6 class="fw-bold text-dark mb-3 small text-uppercase tracking-wider">
+                        <i class="fas fa-list-ul me-2 text-teal" style="color: var(--accent-teal);"></i> Índice de Contenido
+                    </h6>
+                    <nav class="nav flex-column gap-1 small">
+                        <a class="nav-link px-2 py-1 text-secondary rounded text-decoration-none" href="#objeto">1. Objeto de la Plataforma</a>
+                        <a class="nav-link px-2 py-1 text-secondary rounded text-decoration-none" href="#cuenta">2. Registro y Seguridad</a>
+                        <a class="nav-link px-2 py-1 text-secondary rounded text-decoration-none" href="#citas">3. Agendamiento y Cancelaciones</a>
+                        <a class="nav-link px-2 py-1 text-secondary rounded text-decoration-none" href="#responsabilidad">4. Urgencias y Responsabilidad</a>
+                        <a class="nav-link px-2 py-1 text-secondary rounded text-decoration-none" href="#propiedad">5. Propiedad Intelectual</a>
+                        <a class="nav-link px-2 py-1 text-secondary rounded text-decoration-none" href="#modificaciones">6. Modificaciones</a>
+                        <a class="nav-link px-2 py-1 text-secondary rounded text-decoration-none" href="#jurisdiccion">7. Legislación Aplicable</a>
+                    </nav>
+
+                    <hr class="my-3 opacity-10">
+
+                    <div class="p-2 rounded-3" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
+                        <div class="d-flex align-items-center gap-2 mb-1 text-dark fw-semibold small">
+                            <i class="fas fa-user-shield text-teal" style="color: var(--accent-teal);"></i> ¿Dudas Legales?
+                        </div>
+                        <p class="text-muted mb-2" style="font-size: 0.78rem;">
+                            Escríbenos para cualquier aclaración sobre nuestros términos o atención.
+                        </p>
+                        <a href="{% url 'core:contacto' %}" class="btn btn-sm btn-outline-dark w-100 fw-medium" style="font-size: 0.8rem;">
+                            Contáctanos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Body -->
+        <div class="col-lg-8 col-md-8">
+            <div class="bg-white p-4 p-md-5 rounded-4 shadow-sm border" style="border-color: var(--border-subtle) !important;">
+                
+                <div class="alert mb-4 border-0" style="background: #F0FDFA; color: #0F766E; border-radius: var(--radius-md);">
+                    <div class="d-flex align-items-start gap-2">
+                        <i class="fas fa-info-circle mt-1"></i>
+                        <div class="small">
+                            Al registrarse, reservar una cita o navegar en la plataforma de <strong>{% if config %}{{ config.nombre_consultorio }}{% else %}Dental Clinic{% endif %}</strong>, usted acepta plenamente estos Términos y Condiciones, así como nuestra <a href="{% url 'core:privacidad' %}" class="fw-bold text-decoration-underline" style="color: #0F766E;">Política de Privacidad</a>.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 1 -->
+                <section id="objeto" class="mb-5">
+                    <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-dark rounded-circle" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">1</span>
+                        Objeto de la Plataforma
+                    </h4>
+                    <p class="text-body lh-lg">
+                        La plataforma web tiene como finalidad facilitar a los pacientes el acceso autónomo a la información de tratamientos odontológicos, consulta de disponibilidad en tiempo real, gestión y reserva de citas presenciales, y el seguimiento seguro de su historial de atención médica dental en <strong>{% if config %}{{ config.nombre_consultorio }}{% else %}Dental Clinic{% endif %}</strong>.
+                    </p>
+                </section>
+
+                <hr class="my-4 opacity-10">
+
+                <!-- Section 2 -->
+                <section id="cuenta" class="mb-5">
+                    <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-dark rounded-circle" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">2</span>
+                        Registro de Usuario y Seguridad de la Cuenta
+                    </h4>
+                    <ul class="text-body lh-lg mb-3">
+                        <li><strong>Veracidad de la Información:</strong> Para crear una cuenta y solicitar citas, el Usuario debe ingresar datos verídicos y vigentes (Nombre completo, correo electrónico válido y teléfono de contacto directo).</li>
+                        <li><strong>Activación Obligatoria:</strong> Por estrictas medidas de validación de identidad y protección contra registros no autorizados, toda cuenta nueva requiere activación mediante el enlace tokenizado enviado a su correo electrónico.</li>
+                        <li><strong>Confidencialidad de Contraseña:</strong> El Usuario es el único responsable de salvaguardar sus credenciales. Queda prohibida la transferencia de cuentas a terceros.</li>
+                    </ul>
+                </section>
+
+                <hr class="my-4 opacity-10">
+
+                <!-- Section 3 -->
+                <section id="citas" class="mb-5">
+                    <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-dark rounded-circle" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">3</span>
+                        Políticas de Agendamiento, Cancelación y Asistencia
+                    </h4>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <div class="p-3 rounded-3 h-100" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
+                                <h6 class="fw-bold text-dark mb-2"><i class="fas fa-clock text-teal me-2" style="color: var(--accent-teal);"></i>Puntualidad</h6>
+                                <p class="text-muted small mb-0">Requerimos presentarse en el consultorio con al menos 10 minutos de anticipación a la hora reservada para preparar el gabinete odontológico.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 rounded-3 h-100" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
+                                <h6 class="fw-bold text-dark mb-2"><i class="fas fa-calendar-times text-danger me-2"></i>Cancelación Anticipada</h6>
+                                <p class="text-muted small mb-0">Las cancelaciones deben realizarse desde la sección <em>Mis Citas</em> con un mínimo de 24 horas de antelación para permitir la atención de otros pacientes.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-body lh-lg">
+                        <strong>Disponibilidad y Bloqueos:</strong> Los horarios mostrados se generan en tiempo real según la configuración de turnos y días hábiles del consultorio. El personal odontológico se reserva el derecho de reprogramar citas ante urgencias quirúrgicas o causas de fuerza mayor, notificando oportunamente al paciente.
+                    </p>
+                </section>
+
+                <hr class="my-4 opacity-10">
+
+                <!-- Section 4 -->
+                <section id="responsabilidad" class="mb-5">
+                    <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-dark rounded-circle" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">4</span>
+                        Limitación de Responsabilidad Médica y Urgencias
+                    </h4>
+                    <div class="p-3 mb-3 rounded-3" style="background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E;">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fas fa-exclamation-triangle mt-1"></i>
+                            <div class="small">
+                                <strong>Atención de Urgencias Vitales:</strong> Esta plataforma digital no es un servicio de emergencias médicas hospitalarias. Si experimenta dolor severo incapacitante, traumatismo maxilofacial grave o hemorragia aguda, diríjase inmediatamente a un centro de urgencias hospitalario.
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-body lh-lg">
+                        El motivo de consulta registrado en el portal es de carácter orientativo para la preparación del instrumental. El diagnóstico formal, prescripción y tratamiento definitivo se establecen exclusivamente durante la consulta presencial por el profesional de la salud dental acreditado.
+                    </p>
+                </section>
+
+                <hr class="my-4 opacity-10">
+
+                <!-- Section 5 -->
+                <section id="propiedad" class="mb-5">
+                    <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-dark rounded-circle" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">5</span>
+                        Propiedad Intelectual
+                    </h4>
+                    <p class="text-body lh-lg">
+                        Los logotipos, marcas, diseños, software, bases de datos, fotografías y contenidos publicados en este portal son titularidad de <strong>{% if config %}{{ config.nombre_consultorio }}{% else %}Dental Clinic{% endif %}</strong> y están protegidos por las leyes aplicables de propiedad industrial e intelectual.
+                    </p>
+                </section>
+
+                <hr class="my-4 opacity-10">
+
+                <!-- Section 6 & 7 -->
+                <section id="modificaciones" class="mb-4">
+                    <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-dark rounded-circle" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">6</span>
+                        Modificaciones y Actualizaciones
+                    </h4>
+                    <p class="text-body lh-lg">
+                        Nos reservamos el derecho de modificar estos términos para adaptarlos a novedades normativas, mejoras en los servicios o cambios operativos. Las modificaciones surtirán efectos inmediatos tras su publicación en esta página.
+                    </p>
+                </section>
+
+                <section id="jurisdiccion">
+                    <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-dark rounded-circle" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">7</span>
+                        Legislación Aplicable y Jurisdicción
+                    </h4>
+                    <p class="text-body lh-lg mb-0">
+                        Para la interpretación y cumplimiento de estos Términos y Condiciones, las partes se someten a la legislación aplicable y a los tribunales competentes de la sede física de {% if config %}{{ config.nombre_consultorio }} en {{ config.direccion }}{% else %}Dental Clinic{% endif %}.
+                    </p>
+                </section>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

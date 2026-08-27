@@ -1,0 +1,194 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Agendar Cita - Dental Clinic{% endblock %}
+
+{% block extra_css %}
+<style>
+    .step-badge {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+    .hora-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        gap: 0.5rem;
+    }
+    .hora-btn {
+        border: 2px solid #dee2e6;
+        background: white;
+        border-radius: 8px;
+        padding: 0.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 0.9rem;
+    }
+    .hora-btn:hover {
+        border-color: var(--bs-primary);
+        background: #e8f0fe;
+        color: var(--bs-primary);
+    }
+    .hora-btn.selected {
+        border-color: var(--bs-primary);
+        background: var(--bs-primary);
+        color: white;
+    }
+    #hora-select { display: none; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card card-shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-calendar-plus me-2"></i>Agendar Cita</h4>
+                </div>
+                <div class="card-body p-4">
+
+                    <!-- PASO 1: Elegir fecha (GET para cargar horarios) -->
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <span class="step-badge bg-primary text-white">1</span>
+                        <h5 class="mb-0">Elige una fecha</h5>
+                    </div>
+                    <form method="GET" id="fechaForm" class="mb-4">
+                        <input type="date" name="fecha" id="fechaInput"
+                            class="form-control form-control-lg"
+                            data-custom-flatpickr
+                            min="{% now 'Y-m-d' %}"
+                            value="{{ request.GET.fecha|default:'' }}" data-today="{% now 'Y-m-d' %}">
+                    </form>
+
+                    <hr class="my-4">
+
+                    <!-- PASO 2 y 3: Formulario de reserva (POST) -->
+                    <form method="POST" id="reservaForm">
+                        {% csrf_token %}
+
+                        <!-- Campo fecha oculto (solo cuando ya se eligió fecha en el paso 1) -->
+                        {% if request.GET.fecha %}
+                        <input type="hidden" name="fecha" value="{{ request.GET.fecha }}">
+                        {% endif %}
+
+                        <!-- PASO 2: Servicio -->
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <span class="step-badge bg-primary text-white">2</span>
+                            <h5 class="mb-0">Selecciona el servicio</h5>
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form.motivo }}
+                            {% if form.motivo.errors %}
+                            <div class="invalid-feedback d-block">{{ form.motivo.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- PASO 3: Horario -->
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <span class="step-badge {% if horarios_disponibles %}bg-primary{% else %}bg-secondary{% endif %} text-white">3</span>
+                            <h5 class="mb-0">Selecciona un horario</h5>
+                        </div>
+
+                        {% if request.GET.fecha and not horarios_disponibles %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                No hay horarios disponibles para la fecha seleccionada. Elige otro día.
+                            </div>
+                        {% elif not request.GET.fecha %}
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Selecciona una fecha para ver los horarios disponibles.
+                            </div>
+                        {% else %}
+                            <!-- Select oculto que se envía con el form -->
+                            <select name="hora" id="hora-select" required>
+                                {% for h in horarios_disponibles %}
+                                <option value="{{ h }}">{{ h }}</option>
+                                {% endfor %}
+                            </select>
+
+                            <!-- Grilla visual de horarios -->
+                            <div class="hora-grid mb-3">
+                                {% for h in horarios_disponibles %}
+                                <div class="hora-btn {% if forloop.first %}selected{% endif %}"
+                                     onclick="selectHora(this, '{{ h }}')">
+                                    {{ h }}
+                                </div>
+                                {% empty %}
+                                <p class="text-muted">Sin horarios.</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.hora.errors %}
+                        <div class="invalid-feedback d-block mb-3">{{ form.hora.errors }}</div>
+                        {% endif %}
+
+                        <hr class="my-4">
+
+                        <div class="d-grid">
+                            <button type="submit"
+                                class="btn btn-primary btn-lg {% if not horarios_disponibles %}disabled{% endif %}">
+                                <i class="fas fa-check-circle me-2"></i>Confirmar Cita
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Inicializar seleccion del primer horario
+    (function() {
+        var select = document.getElementById('hora-select');
+        if (select && select.options.length > 0) {
+            select.value = select.options[0].value;
+        }
+    })();
+
+    function selectHora(el, hora) {
+        document.querySelectorAll('.hora-btn').forEach(function(btn) {
+            btn.classList.remove('selected');
+        });
+        el.classList.add('selected');
+        var select = document.getElementById('hora-select');
+        if (select) select.value = hora;
+    }
+
+    // Flatpickr personalizado para el input de fecha (paso 1)
+    document.addEventListener('DOMContentLoaded', function () {
+        var inputFecha = document.getElementById('fechaInput');
+        if (inputFecha) {
+            var locale = (flatpickr.l10ns && flatpickr.l10ns.es) ? 'es' : 'default';
+            flatpickr(inputFecha, {
+                locale: locale,
+                dateFormat: 'Y-m-d',
+                altInput: true,
+                altFormat: 'd/m/Y',
+                allowInput: true,
+                disableMobile: true,
+                minDate: 'today',
+                defaultDate: inputFecha.value || inputFecha.dataset.today || 'today',
+                onChange: function (selectedDates, dateStr) {
+                    inputFecha.closest('form').submit();
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

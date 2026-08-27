@@ -1,0 +1,321 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Configuración del Consultorio{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --cfg-blue:   #2c3e7a;
+        --cfg-teal:   #0d9488;
+        --cfg-border: #e2e8f0;
+        --cfg-radius: 14px;
+        --cfg-shadow: 0 10px 40px rgba(44,62,122,.12);
+    }
+
+    .cfg-page {
+        min-height: calc(100vh - 160px);
+        background: linear-gradient(135deg, #e8f0fe 0%, #f0fdf4 100%);
+        padding: 2.5rem 0 4rem;
+    }
+
+    /* ── Hero ── */
+    .cfg-hero {
+        background: linear-gradient(135deg, var(--cfg-blue) 0%, #3b82f6 100%);
+        border-radius: var(--cfg-radius);
+        color: white;
+        padding: 2rem 2.5rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    .cfg-hero::after {
+        content: '\f013';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        font-size: 8rem;
+        position: absolute;
+        right: -1rem; top: -1.5rem;
+        opacity: .07;
+        color: white;
+        pointer-events: none;
+    }
+    .cfg-hero h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: .25rem; }
+    .cfg-hero p  { opacity: .85; margin: 0; }
+
+    /* ── Cards ── */
+    .cfg-card {
+        background: white;
+        border-radius: var(--cfg-radius);
+        box-shadow: var(--cfg-shadow);
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+    .cfg-card-header {
+        background: linear-gradient(90deg, var(--cfg-blue) 0%, #3b82f6 100%);
+        color: white;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+    .cfg-card-body { padding: 1.75rem; }
+
+    /* ── Inputs ── */
+    .cfg-label {
+        font-size: .82rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        color: #64748b;
+        margin-bottom: .4rem;
+    }
+    .cfg-input {
+        border: 2px solid var(--cfg-border);
+        border-radius: 10px;
+        padding: .6rem 1rem;
+        font-size: .95rem;
+        transition: border-color .2s, box-shadow .2s;
+        width: 100%;
+    }
+    .cfg-input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59,130,246,.12);
+    }
+
+    /* ── Horario table ── */
+    .horario-table { width: 100%; border-collapse: separate; border-spacing: 0 .5rem; }
+    .horario-row td { vertical-align: middle; padding: .5rem .75rem; }
+    .horario-row .day-cell {
+        display: flex; align-items: center; gap: .6rem;
+        font-weight: 600; color: #1e293b; min-width: 130px;
+    }
+    .horario-row .day-icon {
+        width: 34px; height: 34px; border-radius: 50%;
+        background: linear-gradient(135deg,#e8f0fe,#dbeafe);
+        color: var(--cfg-blue);
+        display: flex; align-items: center; justify-content: center;
+        font-size: .85rem; flex-shrink: 0;
+    }
+    .horario-row .time-group {
+        display: flex; align-items: center; gap: .4rem;
+    }
+    .horario-row .time-sep { color:#94a3b8; font-size:.9rem; }
+
+    /* Row active / inactive states */
+    .horario-row.inactive .time-group input { opacity: .35; pointer-events: none; }
+    .horario-row.inactive .day-cell { color: #94a3b8; }
+    .horario-row.inactive .day-icon {
+        background: #f1f5f9; color: #94a3b8;
+    }
+    .horario-row { transition: opacity .2s; }
+    .horario-row td { background: #f8fafc; }
+    .horario-row td:first-child { border-radius: 10px 0 0 10px; }
+    .horario-row td:last-child  { border-radius: 0 10px 10px 0; }
+
+    /* Active toggle */
+    .day-toggle { width: 42px; height: 24px; position: relative; display: inline-block; }
+    .day-toggle input { opacity: 0; width: 0; height: 0; }
+    .day-toggle .slider {
+        position: absolute; inset: 0; cursor: pointer;
+        background: #cbd5e1; border-radius: 24px;
+        transition: .3s;
+    }
+    .day-toggle .slider::before {
+        content: '';
+        position: absolute;
+        width: 18px; height: 18px;
+        left: 3px; bottom: 3px;
+        background: white; border-radius: 50%;
+        transition: .3s;
+        box-shadow: 0 1px 3px rgba(0,0,0,.2);
+    }
+    .day-toggle input:checked + .slider { background: var(--cfg-teal); }
+    .day-toggle input:checked + .slider::before { transform: translateX(18px); }
+
+    /* ── Save button ── */
+    .btn-save {
+        background: linear-gradient(135deg, var(--cfg-blue) 0%, #3b82f6 100%);
+        color: white; border: none; border-radius: 12px;
+        padding: .85rem 2.5rem; font-size: 1rem; font-weight: 600;
+        letter-spacing: .03em;
+        box-shadow: 0 4px 15px rgba(44,62,122,.3);
+        transition: transform .15s, box-shadow .15s; cursor: pointer;
+    }
+    .btn-save:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(44,62,122,.4); color: white; }
+    .btn-save:active { transform: translateY(0); }
+
+    .status-pill {
+        display: inline-flex; align-items: center; gap: .4rem;
+        background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.35);
+        border-radius: 20px; padding: .25rem .85rem; font-size: .8rem; font-weight: 600;
+    }
+    .status-dot { width:8px;height:8px;border-radius:50%;background:#4ade80;animation:pulse 1.8s infinite; }
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .cfg-error { color:#dc2626; font-size:.82rem; margin-top:.25rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cfg-page">
+<div class="container" style="max-width:860px;">
+
+    <!-- Hero -->
+    <div class="cfg-hero">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+            <div>
+                <h1><i class="fas fa-cog me-2"></i>Configuración del Consultorio</h1>
+                <p>Administra la información y horarios de tu consultorio dental.</p>
+            </div>
+            <span class="status-pill"><span class="status-dot"></span> Sistema activo</span>
+        </div>
+    </div>
+
+    <form method="POST" id="cfgForm" novalidate>
+        {% csrf_token %}
+        {{ formset.management_form }}
+
+        <!-- ── Información general ── -->
+        <div class="cfg-card">
+            <div class="cfg-card-header"><i class="fas fa-hospital"></i> Información del consultorio</div>
+            <div class="cfg-card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="cfg-label" for="{{ form.nombre_consultorio.id_for_label }}">Nombre del consultorio</label>
+                        {{ form.nombre_consultorio }}
+                        {% for e in form.nombre_consultorio.errors %}<p class="cfg-error">{{ e }}</p>{% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="cfg-label" for="{{ form.nombre_dentista.id_for_label }}">Nombre del dentista</label>
+                        {{ form.nombre_dentista }}
+                        {% for e in form.nombre_dentista.errors %}<p class="cfg-error">{{ e }}</p>{% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="cfg-label" for="{{ form.telefono.id_for_label }}">Teléfono</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0 text-muted"><i class="fas fa-phone"></i></span>
+                            {{ form.telefono }}
+                        </div>
+                        {% for e in form.telefono.errors %}<p class="cfg-error">{{ e }}</p>{% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="cfg-label" for="{{ form.direccion.id_for_label }}">Dirección</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0 text-muted"><i class="fas fa-map-marker-alt"></i></span>
+                            {{ form.direccion }}
+                        </div>
+                        {% for e in form.direccion.errors %}<p class="cfg-error">{{ e }}</p>{% endfor %}
+                    </div>
+                    <div class="col-12">
+                        <label class="cfg-label" for="{{ form.zona_horaria.id_for_label }}">Zona horaria</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0 text-muted"><i class="fas fa-globe-americas"></i></span>
+                            {{ form.zona_horaria }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Horario por día ── -->
+        <div class="cfg-card">
+            <div class="cfg-card-header"><i class="fas fa-clock"></i> Horario por día de la semana</div>
+            <div class="cfg-card-body">
+                <p class="text-muted small mb-3">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Activa cada día y define su horario. Los slots de 30 min se generan automáticamente dentro del rango.
+                </p>
+
+                <table class="horario-table">
+                    {% for item in horario_forms %}
+                    {% with f=item.form %}
+                    <tr class="horario-row {% if not f.instance.activo %}inactive{% endif %}"
+                        id="row-{{ forloop.counter }}">
+                        <!-- Nombre del día -->
+                        <td>
+                            <div class="day-cell">
+                                <div class="day-icon"><i class="{{ item.icono }}"></i></div>
+                                {{ item.nombre }}
+                            </div>
+                        </td>
+
+                        <!-- Campos ocultos del formset -->
+                        {{ f.id }}
+
+                        <!-- Toggle activo -->
+                        <td style="width:70px; text-align:center;">
+                            <label class="day-toggle" title="Día laboral">
+                                {{ f.activo }}
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+
+                        <!-- Horario -->
+                        <td>
+                            <div class="time-group">
+                                <span class="text-muted small">De</span>
+                                {{ f.hora_apertura }}
+                                <span class="time-sep">→</span>
+                                {{ f.hora_cierre }}
+                            </div>
+                            {% for e in f.hora_apertura.errors %}<p class="cfg-error">{{ e }}</p>{% endfor %}
+                            {% for e in f.hora_cierre.errors %}<p class="cfg-error">{{ e }}</p>{% endfor %}
+                            {% for e in f.non_field_errors %}<p class="cfg-error">{{ e }}</p>{% endfor %}
+                        </td>
+                    </tr>
+                    {% endwith %}
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <!-- ── Botón guardar ── -->
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn-save" id="btnGuardar">
+                <i class="fas fa-save me-2"></i>Guardar cambios
+            </button>
+        </div>
+    </form>
+
+</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Vincular cada checkbox de "activo" con el estado visual de su fila
+    document.querySelectorAll('.day-active-toggle').forEach(function (chk) {
+        var row = chk.closest('.horario-row');
+        syncRow(chk, row);
+        chk.addEventListener('change', function () { syncRow(chk, row); });
+    });
+
+    function syncRow(chk, row) {
+        var timeInputs = row.querySelectorAll('input[type="time"]');
+        if (chk.checked) {
+            row.classList.remove('inactive');
+            timeInputs.forEach(function (inp) { inp.disabled = false; });
+        } else {
+            row.classList.add('inactive');
+            timeInputs.forEach(function (inp) { inp.disabled = true; });
+        }
+    }
+
+    // Spinner al guardar
+    document.getElementById('cfgForm').addEventListener('submit', function () {
+        var btn = document.getElementById('btnGuardar');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Guardando…';
+        btn.disabled = true;
+        // Re-habilitar inputs deshabilitados para que se envíen en el POST
+        document.querySelectorAll('input[type="time"]:disabled').forEach(function (inp) {
+            inp.disabled = false;
+        });
+    });
+});
+</script>
+{% endblock %}

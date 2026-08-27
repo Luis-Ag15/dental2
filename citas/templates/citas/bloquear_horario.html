@@ -1,0 +1,241 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Bloquear Horarios - Dental Clinic{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h2 class="mb-0 text-primary">
+            <i class="fas fa-ban me-2"></i>Gestión de Horarios Bloqueados
+        </h2>
+        <a href="{% url 'citas:dashboard' %}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-1"></i> Volver al Dashboard
+        </a>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Formulario para bloquear nuevo horario -->
+        <div class="col-lg-4">
+            <div class="card card-shadow sticky-top" style="top: 80px;">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-lock me-2"></i>Bloquear Horario</h5>
+                </div>
+                <div class="card-body">
+
+                    <!-- Toggle: horario específico vs todo el día -->
+                    <div class="btn-group w-100 mb-4" role="group">
+                        <input type="radio" class="btn-check" name="modo_bloqueo" id="modoEspecifico" autocomplete="off" checked>
+                        <label class="btn btn-outline-success" for="modoEspecifico">
+                            <i class="fas fa-clock me-1"></i> Horario específico
+                        </label>
+                        <input type="radio" class="btn-check" name="modo_bloqueo" id="modoDia" autocomplete="off">
+                        <label class="btn btn-outline-danger" for="modoDia">
+                            <i class="fas fa-calendar-times me-1"></i> Todo el día
+                        </label>
+                    </div>
+
+                    <form method="POST" action="{% url 'citas:bloquear_horario' %}" id="formBloqueo">
+                        {% csrf_token %}
+                        <!-- Tipo oculto: 'especifico' o 'dia_completo' -->
+                        <input type="hidden" name="tipo" id="tipoBloqueo" value="especifico">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Fecha</label>
+                            <input type="date" name="fecha" id="fechaBloqueo" class="form-control"
+                                   data-custom-flatpickr min="{{ hoy }}" value="{{ hoy }}" required>
+                        </div>
+
+                        <!-- Campos solo para horario específico -->
+                        <div id="camposHorario">
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label fw-semibold">Hora Inicio</label>
+                                    <input type="time" name="hora_inicio" id="horaInicio" class="form-control">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label fw-semibold">Hora Fin</label>
+                                    <input type="time" name="hora_fin" id="horaFin" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info de día completo (solo visible en modo día) -->
+                        <div id="infoDiaCompleto" class="alert alert-danger d-none py-2 mb-3">
+                            <i class="fas fa-calendar-times me-2"></i>
+                            Se bloquearán <strong>todos los horarios</strong> disponibles del día seleccionado.
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Motivo</label>
+                            <input type="text" name="motivo" id="motivoBloqueo" class="form-control"
+                                   placeholder="Ej. Junta, Vacaciones, Mantenimiento" required>
+                        </div>
+
+                        <button type="submit" id="btnBloquear" class="btn btn-success w-100 fw-bold">
+                            <i class="fas fa-lock me-2"></i>Bloquear Horario
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Lista de bloqueos próximos -->
+        <div class="col-lg-8">
+            <div class="card card-shadow">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Horarios Bloqueados Próximos</h5>
+                    <span class="badge bg-light text-primary">{{ bloqueos|length }} bloqueo(s)</span>
+                </div>
+                <div class="card-body p-0">
+                    {% if bloqueos %}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Horario</th>
+                                    <th>Motivo</th>
+                                    <th class="text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for b in bloqueos %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ b.fecha|date:"d/m/Y" }}</strong>
+                                        <div class="small text-muted">{{ b.fecha|date:"l" }}</div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success text-white fs-6 px-3 py-2">
+                                            {{ b.hora_inicio|time:"H:i" }} - {{ b.hora_fin|time:"H:i" }}
+                                        </span>
+                                    </td>
+                                    <td>{{ b.motivo }}</td>
+                                    <td class="text-center">
+                                        <form method="POST"
+                                              action="{% url 'citas:eliminar_bloqueo' b.id %}"
+                                              class="form-eliminar-bloqueo d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-lock-open me-1"></i> Desbloquear
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="p-4 text-center text-muted">
+                        <i class="fas fa-check-circle fa-3x mb-3 text-success"></i>
+                        <p class="mb-0">No hay horarios bloqueados próximos.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal de confirmación para desbloquear -->
+<div class="modal fade" id="modalDesbloquear" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title"><i class="fas fa-lock-open me-2"></i>Confirmar Desbloqueo</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        ¿Deseas desbloquear este horario? Quedará disponible para nuevas citas.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btnConfirmarDesbloqueo">
+          <i class="fas fa-lock-open me-1"></i> Sí, desbloquear
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    var formPendiente = null;
+
+    document.querySelectorAll('.form-eliminar-bloqueo').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            formPendiente = form;
+            new bootstrap.Modal(document.getElementById('modalDesbloquear')).show();
+        });
+    });
+
+    document.getElementById('btnConfirmarDesbloqueo').addEventListener('click', function() {
+        if (formPendiente) {
+            formPendiente.submit();
+            formPendiente = null;
+        }
+    });
+
+    // --- Toggle modo bloqueo: específico vs día completo ---
+    var modoEspecifico = document.getElementById('modoEspecifico');
+    var modoDia       = document.getElementById('modoDia');
+    var camposHorario = document.getElementById('camposHorario');
+    var infoDia       = document.getElementById('infoDiaCompleto');
+    var horaInicio    = document.getElementById('horaInicio');
+    var horaFin       = document.getElementById('horaFin');
+    var tipoBloqueo   = document.getElementById('tipoBloqueo');
+    var btnBloquear   = document.getElementById('btnBloquear');
+
+    function activarModoEspecifico() {
+        camposHorario.classList.remove('d-none');
+        infoDia.classList.add('d-none');
+        horaInicio.setAttribute('required', 'required');
+        horaFin.setAttribute('required', 'required');
+        tipoBloqueo.value = 'especifico';
+        btnBloquear.className = 'btn btn-success w-100 fw-bold';
+        btnBloquear.innerHTML = '<i class="fas fa-lock me-2"></i>Bloquear Horario';
+    }
+
+    function activarModoDia() {
+        camposHorario.classList.add('d-none');
+        infoDia.classList.remove('d-none');
+        horaInicio.removeAttribute('required');
+        horaFin.removeAttribute('required');
+        tipoBloqueo.value = 'dia_completo';
+        btnBloquear.className = 'btn btn-danger w-100 fw-bold';
+        btnBloquear.innerHTML = '<i class="fas fa-calendar-times me-2"></i>Bloquear Todo el Día';
+    }
+
+    modoEspecifico.addEventListener('change', activarModoEspecifico);
+    modoDia.addEventListener('change', activarModoDia);
+
+    // Iniciar en modo específico
+    activarModoEspecifico();
+
+    // Flatpickr para fecha del formulario de bloqueo
+    document.addEventListener('DOMContentLoaded', function () {
+        var inputFecha = document.getElementById('fechaBloqueo');
+        if (inputFecha) {
+            var locale = (flatpickr.l10ns && flatpickr.l10ns.es) ? 'es' : 'default';
+            flatpickr(inputFecha, {
+                locale: locale,
+                dateFormat: 'Y-m-d',
+                altInput: true,
+                altFormat: 'd/m/Y',
+                allowInput: true,
+                disableMobile: true,
+                minDate: 'today',
+                defaultDate: inputFecha.value || null,
+            });
+        }
+    });
+</script>
+{% endblock %}
