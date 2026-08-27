@@ -87,8 +87,29 @@
     }
 
     /* ── Horario table ── */
-    .horario-table { width: 100%; border-collapse: separate; border-spacing: 0 .5rem; }
-    .horario-row td { vertical-align: middle; padding: .5rem .75rem; }
+    .horario-table-container {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 0.5rem;
+    }
+    .horario-table-container::-webkit-scrollbar {
+        height: 6px;
+    }
+    .horario-table-container::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 4px;
+    }
+    .horario-table-container::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+    .horario-table-container::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+
+    .horario-table { width: 100%; min-width: 520px; border-collapse: separate; border-spacing: 0 .5rem; }
+    .horario-row td { vertical-align: middle; padding: .5rem .75rem; white-space: nowrap; }
     .horario-row .day-cell {
         display: flex; align-items: center; gap: .6rem;
         font-weight: 600; color: #1e293b; min-width: 130px;
@@ -102,6 +123,10 @@
     }
     .horario-row .time-group {
         display: flex; align-items: center; gap: .4rem;
+        min-width: 250px;
+    }
+    .horario-row .time-group input[type="time"] {
+        min-width: 110px;
     }
     .horario-row .time-sep { color:#94a3b8; font-size:.9rem; }
 
@@ -229,46 +254,48 @@
                     Activa cada día y define su horario. Los slots de 30 min se generan automáticamente dentro del rango.
                 </p>
 
-                <table class="horario-table">
-                    {% for item in horario_forms %}
-                    {% with f=item.form %}
-                    <tr class="horario-row {% if not f.instance.activo %}inactive{% endif %}"
-                        id="row-{{ forloop.counter }}">
-                        <!-- Nombre del día -->
-                        <td>
-                            <div class="day-cell">
-                                <div class="day-icon"><i class="{{ item.icono }}"></i></div>
-                                {{ item.nombre }}
-                            </div>
-                        </td>
+                <div class="horario-table-container">
+                    <table class="horario-table">
+                        {% for item in horario_forms %}
+                        {% with f=item.form %}
+                        <tr class="horario-row {% if not f.instance.activo %}inactive{% endif %}"
+                            id="row-{{ forloop.counter }}">
+                            <!-- Nombre del día -->
+                            <td>
+                                <div class="day-cell">
+                                    <div class="day-icon"><i class="{{ item.icono }}"></i></div>
+                                    {{ item.nombre }}
+                                </div>
+                            </td>
 
-                        <!-- Campos ocultos del formset -->
-                        {{ f.id }}
+                            <!-- Campos ocultos del formset -->
+                            {{ f.id }}
 
-                        <!-- Toggle activo -->
-                        <td style="width:70px; text-align:center;">
-                            <label class="day-toggle" title="Día laboral">
-                                {{ f.activo }}
-                                <span class="slider"></span>
-                            </label>
-                        </td>
+                            <!-- Toggle activo -->
+                            <td style="width:70px; text-align:center;">
+                                <label class="day-toggle" title="Día laboral">
+                                    {{ f.activo }}
+                                    <span class="slider"></span>
+                                </label>
+                            </td>
 
-                        <!-- Horario -->
-                        <td>
-                            <div class="time-group">
-                                <span class="text-muted small">De</span>
-                                {{ f.hora_apertura }}
-                                <span class="time-sep">→</span>
-                                {{ f.hora_cierre }}
-                            </div>
-                            {% for e in f.hora_apertura.errors %}<p class="cfg-error">{{ e }}</p>{% endfor %}
-                            {% for e in f.hora_cierre.errors %}<p class="cfg-error">{{ e }}</p>{% endfor %}
-                            {% for e in f.non_field_errors %}<p class="cfg-error">{{ e }}</p>{% endfor %}
-                        </td>
-                    </tr>
-                    {% endwith %}
-                    {% endfor %}
-                </table>
+                            <!-- Horario -->
+                            <td>
+                                <div class="time-group">
+                                    <span class="text-muted small">De</span>
+                                    {{ f.hora_apertura }}
+                                    <span class="time-sep">→</span>
+                                    {{ f.hora_cierre }}
+                                </div>
+                                {% for e in f.hora_apertura.errors %}<p class="cfg-error">{{ e }}</p>{% endfor %}
+                                {% for e in f.hora_cierre.errors %}<p class="cfg-error">{{ e }}</p>{% endfor %}
+                                {% for e in f.non_field_errors %}<p class="cfg-error">{{ e }}</p>{% endfor %}
+                            </td>
+                        </tr>
+                        {% endwith %}
+                        {% endfor %}
+                    </table>
+                </div>
             </div>
         </div>
 
